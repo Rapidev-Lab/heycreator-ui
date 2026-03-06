@@ -16,6 +16,8 @@
 
 import { PlanTier } from '@/types/workspace';
 import { IndustryType } from '@/types/firebase';
+import { UsageRecord, UsageMetricType, UsagePrediction } from '@/types/usage';
+import { AgencyWorkspaceSummary } from '@/types/agency';
 
 // ===== HELPERS =====
 
@@ -288,102 +290,235 @@ export async function suggestRole(email: string, jobTitle?: string): Promise<Rol
 
 // ===== SPRINT 4: USAGE =====
 
-export interface UsagePrediction {
-  predictedExhaustionDate: string | null;  // ISO date
-  daysUntilExhaustion: number | null;
-  currentRate: number;  // per day
-  recommendation: string;
-}
-
 /**
- * Predict when usage limits will be exhausted.
- * AI Feature: Usage Prediction
+ * Predict when a workspace will exhaust a usage quota based on the last 7 days of records.
+ *
+ * Algorithm:
+ * 1. Filter the provided records to the last 7 calendar days and to the given metricType.
+ * 2. Sum total units consumed across those 7 days.
+ * 3. Compute a daily average rate.
+ * 4. Project forward: daysUntilLimit = ceil((limit - currentUsage) / dailyRate).
+ * 5. Classify trend by comparing the last 3 days vs the prior 4 days.
+ * 6. Generate a plain-English recommendation.
+ *
+ * AI Feature: Usage Prediction Engine
  */
 export async function predictUsage(
-  used: number,
+  records: UsageRecord[],
   limit: number,
-  billingCycleStart: string
+  metricType: UsageMetricType
 ): Promise<UsagePrediction> {
-  await aiDelay(400, 1000);
+  await new Promise<void>((resolve) => setTimeout(resolve, 500));
 
+  // Compute current total usage from all provided records for this metric
+  const allForMetric = records.filter((r) => r.metricType === metricType);
+  const currentUsage = allForMetric.reduce((sum, r) => sum + r.count, 0);
+
+  // Filter to last 7 days for rate calculation
+  const sevenDaysAgoMs = Date.now() - 7 * 24 * 60 * 60 * 1000;
+  const recentRecords = allForMetric.filter(
+    (r) => new Date(r.date).getTime() >= sevenDaysAgoMs
+  );
+
+  // Daily rate from the past 7 days (use 7 as denominator even if fewer days have records)
+  const recentTotal = recentRecords.reduce((sum, r) => sum + r.count, 0);
+  const dailyRate = recentTotal / 7;
+
+  // Unlimited plan — no projection needed
   if (limit === -1) {
     return {
-      predictedExhaustionDate: null,
-      daysUntilExhaustion: null,
-      currentRate: used / Math.max(1, daysSince(billingCycleStart)),
-      recommendation: 'You have unlimited usage — no limits to worry about!',
+      metricType,
+      currentUsage,
+      limit,
+      predictedDate: '',
+      daysUntilLimit: -1,
+      trend: dailyRate > 0 ? 'increasing' : 'stable',
+      confidence: 0.95,
+      recommendation: `You have unlimited ${metricType} quota on your current plan — no limits to worry about!`,
     };
   }
 
-  const daysPassed = Math.max(1, daysSince(billingCycleStart));
-  const dailyRate = used / daysPassed;
-  const remaining = limit - used;
+  const remaining = limit - currentUsage;
 
-  if (dailyRate === 0) {
+  // Already over limit
+  if (remaining <= 0) {
     return {
-      predictedExhaustionDate: null,
-      daysUntilExhaustion: null,
-      currentRate: 0,
-      recommendation: 'No usage detected yet this cycle.',
+      metricType,
+      currentUsage,
+      limit,
+      predictedDate: new Date().toISOString().slice(0, 10),
+      daysUntilLimit: 0,
+      trend: 'increasing',
+      confidence: 1.0,
+      recommendation: `You have reached your ${metricType} limit of ${limit}. Purchase an overage pack or upgrade your plan to continue.`,
     };
   }
 
-  const daysUntilExhaustion = Math.ceil(remaining / dailyRate);
-  const exhaustionDate = new Date(Date.now() + daysUntilExhaustion * 24 * 60 * 60 * 1000);
+  // No consumption yet — can't project
+  if (dailyRate === 0) {
+    const endOfMonth = new Date();
+    endOfMonth.setUTCDate(1);
+    endOfMonth.setUTCMonth(endOfMonth.getUTCMonth() + 1);
+    endOfMonth.setUTCDate(0); // Last day of current month
+    return {
+      metricType,
+      currentUsage,
+      limit,
+      predictedDate: endOfMonth.toISOString().slice(0, 10),
+      daysUntilLimit: Math.ceil((endOfMonth.getTime() - Date.now()) / (24 * 60 * 60 * 1000)),
+      trend: 'stable',
+      confidence: 0.3,
+      recommendation: `No ${metricType} activity detected in the last 7 days. Usage appears to be stable.`,
+    };
+  }
+
+  // Trend: compare last 3 days vs prior 4 days
+  const threeDaysAgoMs = Date.now() - 3 * 24 * 60 * 60 * 1000;
+  const recentThree = allForMetric
+    .filter((r) => new Date(r.date).getTime() >= threeDaysAgoMs)
+    .reduce((sum, r) => sum + r.count, 0);
+  const priorFour = recentTotal - recentThree;
+  const recentDailyAvg = recentThree / 3;
+  const priorDailyAvg = priorFour / 4;
+
+  let trend: UsagePrediction['trend'] = 'stable';
+  if (recentDailyAvg > priorDailyAvg * 1.15) trend = 'increasing';
+  else if (recentDailyAvg < priorDailyAvg * 0.85) trend = 'decreasing';
+
+  const daysUntilLimit = Math.ceil(remaining / dailyRate);
+  const predictedDate = new Date(Date.now() + daysUntilLimit * 24 * 60 * 60 * 1000)
+    .toISOString()
+    .slice(0, 10);
+
+  // Confidence: higher when more recent data exists (capped at 0.92 for mock data)
+  const confidence = Math.min(0.92, 0.4 + recentRecords.length * 0.08);
+
+  let recommendation: string;
+  if (daysUntilLimit <= 3) {
+    recommendation = `At your current rate of ${dailyRate.toFixed(1)} ${metricType}s/day, you will reach your limit of ${limit} in approximately ${daysUntilLimit} day${daysUntilLimit === 1 ? '' : 's'}. Upgrade your plan or purchase an overage pack immediately to avoid disruption.`;
+  } else if (daysUntilLimit <= 7) {
+    recommendation = `You are on track to hit your ${metricType} limit within the week. Consider upgrading to Growth or Scale for additional capacity.`;
+  } else if (trend === 'increasing') {
+    recommendation = `Your ${metricType} usage is trending upward. At the current rate you have approximately ${daysUntilLimit} days of quota remaining. Monitor closely as usage is accelerating.`;
+  } else if (trend === 'decreasing') {
+    recommendation = `Your ${metricType} usage has slowed recently. At current pace you have approximately ${daysUntilLimit} days of quota left this cycle — you are on track to stay within limits.`;
+  } else {
+    recommendation = `Usage is stable at ${dailyRate.toFixed(1)} ${metricType}s/day. You have approximately ${daysUntilLimit} days of ${metricType} quota remaining in this billing cycle.`;
+  }
 
   return {
-    predictedExhaustionDate: exhaustionDate.toISOString(),
-    daysUntilExhaustion,
-    currentRate: Math.round(dailyRate * 10) / 10,
-    recommendation:
-      daysUntilExhaustion <= 5
-        ? `At your current pace of ${dailyRate.toFixed(1)}/day, you'll hit your limit in ${daysUntilExhaustion} days. Consider upgrading.`
-        : `You're using about ${dailyRate.toFixed(1)} per day. You have roughly ${daysUntilExhaustion} days before reaching your limit.`,
+    metricType,
+    currentUsage,
+    limit,
+    predictedDate,
+    daysUntilLimit,
+    trend,
+    confidence,
+    recommendation,
   };
 }
 
 /**
- * Compare performance across agency workspaces.
+ * Compare performance across agency workspaces and return AI insight strings.
+ *
+ * Generates 3–5 data-driven insight sentences by analysing:
+ * - Search efficiency (searches per campaign)
+ * - Relative usage intensity across workspaces
+ * - Near-limit warnings
+ * - Seat utilisation
+ * - Recommended actions for the lowest-performing workspace
+ *
  * AI Feature: Agency Cross-Workspace Insights
  */
 export async function compareWorkspaces(
-  workspaces: Array<{ name: string; engagement: number; searches: number; campaigns: number }>
+  workspaces: AgencyWorkspaceSummary[]
 ): Promise<string[]> {
-  await aiDelay(600, 1200);
+  await new Promise<void>((resolve) => setTimeout(resolve, 600));
+
+  if (workspaces.length === 0) {
+    return ['No workspaces found. Add your first brand workspace to start seeing insights.'];
+  }
+
+  if (workspaces.length === 1) {
+    return [
+      `${workspaces[0].workspaceName} is your only workspace. Add more brand workspaces to unlock cross-brand performance comparisons.`,
+    ];
+  }
 
   const insights: string[] = [];
 
-  if (workspaces.length < 2) {
-    return ['Add more workspaces to see cross-brand insights.'];
-  }
+  // Sort descending by searches to find the most and least active
+  const bySearches = [...workspaces].sort((a, b) => b.searchesUsed - a.searchesUsed);
+  const mostActive = bySearches[0];
+  const leastActive = bySearches[bySearches.length - 1];
 
-  // Sort by engagement
-  const sorted = [...workspaces].sort((a, b) => b.engagement - a.engagement);
-  const top = sorted[0];
-  const bottom = sorted[sorted.length - 1];
-
-  if (top.engagement > bottom.engagement * 1.2) {
-    const pct = Math.round(((top.engagement - bottom.engagement) / bottom.engagement) * 100);
+  // 1. Search volume comparison
+  if (mostActive.searchesUsed > 0 && leastActive.searchesUsed > 0) {
+    const ratio = (mostActive.searchesUsed / leastActive.searchesUsed).toFixed(1);
     insights.push(
-      `${top.name}'s engagement rate is ${pct}% higher than ${bottom.name}. Consider applying ${top.name}'s creator selection strategy to other brands.`
+      `${mostActive.workspaceName} runs ${ratio}x more searches than ${leastActive.workspaceName} (${mostActive.searchesUsed} vs ${leastActive.searchesUsed} this month). Consider whether ${leastActive.workspaceName} could benefit from a more active discovery cadence.`
+    );
+  } else if (mostActive.searchesUsed > 0 && leastActive.searchesUsed === 0) {
+    insights.push(
+      `${leastActive.workspaceName} has not run any searches this month while ${mostActive.workspaceName} has run ${mostActive.searchesUsed}. This may indicate the team needs a product walkthrough or has not yet launched a creator discovery effort.`
     );
   }
 
-  // Search efficiency
-  const mostSearches = sorted.reduce((max, ws) => (ws.searches > max.searches ? ws : max));
-  if (mostSearches.searches > 30) {
-    insights.push(
-      `${mostSearches.name} has used ${mostSearches.searches} searches this month. Review search patterns to see if saved creator lists could reduce search volume.`
-    );
+  // 2. Search efficiency: searches per active campaign
+  const withCampaigns = workspaces.filter((ws) => ws.campaignsActive > 0);
+  if (withCampaigns.length >= 2) {
+    const efficiencies = withCampaigns.map((ws) => ({
+      name: ws.workspaceName,
+      ratio: ws.searchesUsed / ws.campaignsActive,
+    }));
+    efficiencies.sort((a, b) => a.ratio - b.ratio);
+    const mostEfficient = efficiencies[0];
+    const leastEfficient = efficiencies[efficiencies.length - 1];
+    if (leastEfficient.ratio > mostEfficient.ratio * 1.5) {
+      insights.push(
+        `${mostEfficient.name} uses ${mostEfficient.ratio.toFixed(1)} searches per active campaign compared to ${leastEfficient.ratio.toFixed(1)} for ${leastEfficient.name}. Sharing vetted creator lists from ${mostEfficient.name} could reduce search overhead for ${leastEfficient.name}.`
+      );
+    }
   }
 
-  // Campaign activity
-  const totalCampaigns = workspaces.reduce((sum, ws) => sum + ws.campaigns, 0);
-  insights.push(
-    `Across all brands, you're running ${totalCampaigns} active campaigns. Peak performance is typically 3-5 campaigns per brand.`
+  // 3. Near-limit warnings
+  const nearLimit = workspaces.filter(
+    (ws) =>
+      ws.searchesLimit !== -1 &&
+      ws.searchesLimit > 0 &&
+      ws.searchesUsed / ws.searchesLimit >= 0.8
   );
+  for (const ws of nearLimit) {
+    const pct = Math.round((ws.searchesUsed / ws.searchesLimit) * 100);
+    const remaining = ws.searchesLimit - ws.searchesUsed;
+    insights.push(
+      `${ws.workspaceName} has used ${pct}% of their monthly search quota (${ws.searchesUsed}/${ws.searchesLimit}) with only ${remaining} search${remaining === 1 ? '' : 'es'} remaining. Upgrading to the next plan tier would remove this constraint.`
+    );
+  }
 
-  return insights;
+  // 4. Campaign load across all workspaces
+  const totalCampaigns = workspaces.reduce((sum, ws) => sum + ws.campaignsActive, 0);
+  const avgCampaigns = totalCampaigns / workspaces.length;
+  if (totalCampaigns > 0) {
+    const busiest = [...workspaces].sort((a, b) => b.campaignsActive - a.campaignsActive)[0];
+    insights.push(
+      `Your agency is managing ${totalCampaigns} active campaigns across ${workspaces.length} workspaces (avg ${avgCampaigns.toFixed(1)} per workspace). ${busiest.workspaceName} leads with ${busiest.campaignsActive} active campaigns.`
+    );
+  }
+
+  // 5. Seat utilisation across all workspaces
+  const underutilisedSeats = workspaces.filter(
+    (ws) => ws.seatsLimit > 1 && ws.seatsUsed / ws.seatsLimit < 0.5
+  );
+  if (underutilisedSeats.length > 0) {
+    const names = underutilisedSeats.map((ws) => ws.workspaceName).join(' and ');
+    insights.push(
+      `${names} ${underutilisedSeats.length === 1 ? 'has' : 'have'} unused seat capacity. Inviting additional team members would improve collaboration and distribute the search workload.`
+    );
+  }
+
+  // Return at most 5 insights to keep the UI clean
+  return insights.slice(0, 5);
 }
 
 // ===== SPRINT 5: MIGRATION =====
