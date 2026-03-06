@@ -1,0 +1,951 @@
+{
+  "HeyCreator": {
+    "color": {
+      "brand": {
+        "navy": {
+          "value": "#001F54",
+          "type": "color",
+          "description": "Primary brand navy - most used color (882 occurrences). Main CTA backgrounds, sidebar, headings, active states."
+        },
+        "navy-dark": {
+          "value": "#0A0A32",
+          "type": "color",
+          "description": "Darker navy variant. Used in deep backgrounds and sidebar gradients."
+        },
+        "navy-deep": {
+          "value": "#000546",
+          "type": "color",
+          "description": "Deep navy variant (223 occurrences). Sidebar backgrounds, dark sections."
+        },
+        "cyan": {
+          "value": "#00A8CC",
+          "type": "color",
+          "description": "Primary cyan/teal accent (126 occurrences). Links, highlights, secondary CTAs."
+        },
+        "cyan-dark": {
+          "value": "#0090B0",
+          "type": "color",
+          "description": "Darker cyan for hover states on primary accent elements."
+        },
+        "accent-red": {
+          "value": "#FF3B30",
+          "type": "color",
+          "description": "Red accent for destructive actions, notifications, alerts."
+        },
+        "gradient-start": {
+          "value": "#001F54",
+          "type": "color",
+          "description": "Gradient start color for primary buttons (navy to cyan gradient)."
+        },
+        "gradient-end": {
+          "value": "#00A8CC",
+          "type": "color",
+          "description": "Gradient end color for primary buttons (navy to cyan gradient)."
+        }
+      },
+      "text": {
+        "primary": {
+          "value": "#1F2937",
+          "type": "color",
+          "description": "Primary text color (gray-800). Headings, body text, important labels."
+        },
+        "secondary": {
+          "value": "#4B5563",
+          "type": "color",
+          "description": "Secondary text color (gray-600). Descriptions, secondary labels."
+        },
+        "muted": {
+          "value": "#6B7280",
+          "type": "color",
+          "description": "Muted text color (gray-500). Captions, timestamps, helper text."
+        },
+        "light": {
+          "value": "#9CA3AF",
+          "type": "color",
+          "description": "Light text color (gray-400). Placeholder text, disabled labels."
+        },
+        "on-dark": {
+          "value": "#FFFFFF",
+          "type": "color",
+          "description": "Text on dark backgrounds (navy, cyan CTAs)."
+        },
+        "on-dark-muted": {
+          "value": "#94A3B8",
+          "type": "color",
+          "description": "Muted text on dark backgrounds (sidebar secondary text)."
+        },
+        "link": {
+          "value": "#00A8CC",
+          "type": "color",
+          "description": "Link text color. Matches brand cyan."
+        },
+        "heading": {
+          "value": "#171717",
+          "type": "color",
+          "description": "Page-level heading text. CSS variable --foreground."
+        }
+      },
+      "background": {
+        "page": {
+          "value": "#F5F7FA",
+          "type": "color",
+          "description": "Main page background. Subtle cool gray."
+        },
+        "card": {
+          "value": "#FFFFFF",
+          "type": "color",
+          "description": "Card and content area background."
+        },
+        "subtle": {
+          "value": "#F9FAFB",
+          "type": "color",
+          "description": "Subtle background (gray-50). Table headers, hover states, section dividers."
+        },
+        "muted": {
+          "value": "#F3F4F6",
+          "type": "color",
+          "description": "Muted background (gray-100). Input backgrounds, disabled states, chips."
+        },
+        "elevated": {
+          "value": "#FFFFFF",
+          "type": "color",
+          "description": "Elevated surface (cards, modals, dropdowns)."
+        },
+        "overlay": {
+          "value": "rgba(0, 0, 0, 0.5)",
+          "type": "color",
+          "description": "Modal/dialog overlay background."
+        },
+        "brand-light": {
+          "value": "#fcfdff",
+          "type": "color",
+          "description": "Very light brand tint. Used for brand-themed light backgrounds."
+        },
+        "brand-muted": {
+          "value": "#ececf1",
+          "type": "color",
+          "description": "Muted brand background. Dividers, section separators."
+        }
+      },
+      "border": {
+        "default": {
+          "value": "#E5E7EB",
+          "type": "color",
+          "description": "Default border color (gray-200). Card borders, input borders, dividers."
+        },
+        "light": {
+          "value": "#F3F4F6",
+          "type": "color",
+          "description": "Light border (gray-100). Subtle dividers, table row borders."
+        },
+        "medium": {
+          "value": "#D1D5DB",
+          "type": "color",
+          "description": "Medium border (gray-300). Active input borders, separator lines."
+        },
+        "dark": {
+          "value": "#9CA3AF",
+          "type": "color",
+          "description": "Dark border (gray-400). Emphasized boundaries."
+        },
+        "focus": {
+          "value": "#001F54",
+          "type": "color",
+          "description": "Focus ring border color. Matches brand navy."
+        }
+      },
+      "status": {
+        "success": {
+          "value": "#10B981",
+          "type": "color",
+          "description": "Success green (emerald-500). Active status, verified badges, positive metrics."
+        },
+        "success-light": {
+          "value": "#D1FAE5",
+          "type": "color",
+          "description": "Success background (emerald-100). Status badges, success alerts."
+        },
+        "success-dark": {
+          "value": "#065F46",
+          "type": "color",
+          "description": "Success text (emerald-800). Text on success-light backgrounds."
+        },
+        "warning": {
+          "value": "#F59E0B",
+          "type": "color",
+          "description": "Warning amber (amber-500). Pending status, caution indicators."
+        },
+        "warning-light": {
+          "value": "#FEF3C7",
+          "type": "color",
+          "description": "Warning background (amber-100). Highlight backgrounds, warning badges."
+        },
+        "warning-dark": {
+          "value": "#92400E",
+          "type": "color",
+          "description": "Warning text (amber-800). Text on warning-light backgrounds."
+        },
+        "error": {
+          "value": "#EF4444",
+          "type": "color",
+          "description": "Error red (red-500). Validation errors, declined status, destructive."
+        },
+        "error-light": {
+          "value": "#FEE2E2",
+          "type": "color",
+          "description": "Error background (red-100). Error badges, error alerts."
+        },
+        "error-dark": {
+          "value": "#991B1B",
+          "type": "color",
+          "description": "Error text (red-800). Text on error-light backgrounds."
+        },
+        "info": {
+          "value": "#3B82F6",
+          "type": "color",
+          "description": "Info blue (blue-500). Verified badges, info tooltips, links."
+        },
+        "info-light": {
+          "value": "#DBEAFE",
+          "type": "color",
+          "description": "Info background (blue-100). Info badges, blue alerts."
+        },
+        "info-dark": {
+          "value": "#1E40AF",
+          "type": "color",
+          "description": "Info text (blue-800). Text on info-light backgrounds."
+        }
+      },
+      "platform": {
+        "instagram": {
+          "value": "#E4405F",
+          "type": "color",
+          "description": "Instagram brand color. Platform badges, icons."
+        },
+        "tiktok": {
+          "value": "#000000",
+          "type": "color",
+          "description": "TikTok brand color. Platform badges, icons."
+        },
+        "youtube": {
+          "value": "#FF0000",
+          "type": "color",
+          "description": "YouTube brand color. Platform badges, icons."
+        },
+        "twitter": {
+          "value": "#1DA1F2",
+          "type": "color",
+          "description": "Twitter/X brand color. Platform badges, icons."
+        },
+        "facebook": {
+          "value": "#1877F2",
+          "type": "color",
+          "description": "Facebook brand color. Platform badges, icons."
+        },
+        "linkedin": {
+          "value": "#0A66C2",
+          "type": "color",
+          "description": "LinkedIn brand color. Social links."
+        }
+      }
+    },
+    "fontFamily": {
+      "body": {
+        "value": "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif",
+        "type": "fontFamilies",
+        "description": "Primary body font stack. System fonts for optimal rendering."
+      },
+      "mono": {
+        "value": "'SF Mono', 'Fira Code', 'Fira Mono', 'Roboto Mono', monospace",
+        "type": "fontFamilies",
+        "description": "Monospace font for code, OTP inputs, metrics."
+      }
+    },
+    "fontSize": {
+      "2xs": {
+        "value": "11",
+        "type": "fontSizes",
+        "description": "Extra extra small (11px). Platform badges, micro labels. Used 103 times as text-[11px]."
+      },
+      "xs": {
+        "value": "12",
+        "type": "fontSizes",
+        "description": "Extra small (12px / text-xs). Captions, timestamps, badge text. Used 576 times."
+      },
+      "sm": {
+        "value": "14",
+        "type": "fontSizes",
+        "description": "Small (14px / text-sm). Most common size (1,433 uses). Body text, labels, form inputs."
+      },
+      "base": {
+        "value": "16",
+        "type": "fontSizes",
+        "description": "Base (16px / text-base). Paragraph text, input text, medium labels."
+      },
+      "lg": {
+        "value": "18",
+        "type": "fontSizes",
+        "description": "Large (18px / text-lg). Section headings, card titles."
+      },
+      "xl": {
+        "value": "20",
+        "type": "fontSizes",
+        "description": "Extra large (20px / text-xl). Page subtitles, prominent headings."
+      },
+      "2xl": {
+        "value": "24",
+        "type": "fontSizes",
+        "description": "2X large (24px / text-2xl). Page titles, hero text."
+      },
+      "3xl": {
+        "value": "30",
+        "type": "fontSizes",
+        "description": "3X large (30px / text-3xl). Major headings."
+      },
+      "4xl": {
+        "value": "36",
+        "type": "fontSizes",
+        "description": "4X large (36px / text-4xl or text-[36px]). Hero headings."
+      },
+      "5xl": {
+        "value": "48",
+        "type": "fontSizes",
+        "description": "5X large (48px / text-[48px]). Display headings, large stats."
+      }
+    },
+    "fontWeight": {
+      "normal": {
+        "value": "400",
+        "type": "fontWeights",
+        "description": "Normal weight. Body text, descriptions."
+      },
+      "medium": {
+        "value": "500",
+        "type": "fontWeights",
+        "description": "Medium weight (691 uses). Labels, nav items, form fields."
+      },
+      "semibold": {
+        "value": "600",
+        "type": "fontWeights",
+        "description": "Semibold weight (535 uses). Button text, card titles, emphasis."
+      },
+      "bold": {
+        "value": "700",
+        "type": "fontWeights",
+        "description": "Bold weight (538 uses). Headings, stats, strong emphasis."
+      }
+    },
+    "lineHeight": {
+      "none": {
+        "value": "1",
+        "type": "lineHeights",
+        "description": "No extra line height. Icons, single-line elements."
+      },
+      "tight": {
+        "value": "1.25",
+        "type": "lineHeights",
+        "description": "Tight line height. Headings, titles."
+      },
+      "snug": {
+        "value": "1.375",
+        "type": "lineHeights",
+        "description": "Snug line height. Subtitles, medium text."
+      },
+      "normal": {
+        "value": "1.5",
+        "type": "lineHeights",
+        "description": "Normal line height. Body text, paragraphs."
+      },
+      "relaxed": {
+        "value": "1.625",
+        "type": "lineHeights",
+        "description": "Relaxed line height. Long-form text, readability."
+      }
+    },
+    "letterSpacing": {
+      "tighter": {
+        "value": "-0.05em",
+        "type": "letterSpacing",
+        "description": "Tighter tracking. Large display headings."
+      },
+      "tight": {
+        "value": "-0.025em",
+        "type": "letterSpacing",
+        "description": "Tight tracking. Headings, titles."
+      },
+      "normal": {
+        "value": "0em",
+        "type": "letterSpacing",
+        "description": "Normal tracking. Body text."
+      },
+      "wide": {
+        "value": "0.025em",
+        "type": "letterSpacing",
+        "description": "Wide tracking. Uppercase labels, overlines."
+      },
+      "wider": {
+        "value": "0.05em",
+        "type": "letterSpacing",
+        "description": "Wider tracking. All-caps section headers."
+      }
+    },
+    "spacing": {
+      "0": {
+        "value": "0",
+        "type": "spacing",
+        "description": "No spacing."
+      },
+      "0.5": {
+        "value": "2",
+        "type": "spacing",
+        "description": "2px. Micro spacing."
+      },
+      "1": {
+        "value": "4",
+        "type": "spacing",
+        "description": "4px. Tight inner padding, icon gaps."
+      },
+      "1.5": {
+        "value": "6",
+        "type": "spacing",
+        "description": "6px. Small gaps between badges/chips."
+      },
+      "2": {
+        "value": "8",
+        "type": "spacing",
+        "description": "8px (514 uses as gap-2). Standard small gap. Badge padding, chip gaps."
+      },
+      "2.5": {
+        "value": "10",
+        "type": "spacing",
+        "description": "10px. Button vertical padding."
+      },
+      "3": {
+        "value": "12",
+        "type": "spacing",
+        "description": "12px. Input padding, card inner margins, section gaps."
+      },
+      "4": {
+        "value": "16",
+        "type": "spacing",
+        "description": "16px (421 uses as px-4). Standard padding. Card padding, input horizontal padding."
+      },
+      "5": {
+        "value": "20",
+        "type": "spacing",
+        "description": "20px. Button horizontal padding, medium gaps."
+      },
+      "6": {
+        "value": "24",
+        "type": "spacing",
+        "description": "24px (353 uses as px-6). Section padding, card body padding."
+      },
+      "8": {
+        "value": "32",
+        "type": "spacing",
+        "description": "32px. Large section spacing, page margins."
+      },
+      "10": {
+        "value": "40",
+        "type": "spacing",
+        "description": "40px. Section dividers, large vertical gaps."
+      },
+      "12": {
+        "value": "48",
+        "type": "spacing",
+        "description": "48px. Page section spacing."
+      },
+      "16": {
+        "value": "64",
+        "type": "spacing",
+        "description": "64px. Major layout sections."
+      },
+      "20": {
+        "value": "80",
+        "type": "spacing",
+        "description": "80px. Page-level top/bottom padding."
+      },
+      "24": {
+        "value": "96",
+        "type": "spacing",
+        "description": "96px. Hero section spacing."
+      }
+    },
+    "borderRadius": {
+      "none": {
+        "value": "0",
+        "type": "borderRadius",
+        "description": "No border radius. Sharp corners."
+      },
+      "sm": {
+        "value": "2",
+        "type": "borderRadius",
+        "description": "Small radius (2px). Inline highlights, code blocks."
+      },
+      "default": {
+        "value": "4",
+        "type": "borderRadius",
+        "description": "Default radius (4px). Small buttons, tags."
+      },
+      "md": {
+        "value": "6",
+        "type": "borderRadius",
+        "description": "Medium radius (6px). Form inputs, select fields."
+      },
+      "lg": {
+        "value": "8",
+        "type": "borderRadius",
+        "description": "Large radius (8px / rounded-lg, 790 uses). Cards, buttons, dropdowns. Most common radius."
+      },
+      "xl": {
+        "value": "12",
+        "type": "borderRadius",
+        "description": "Extra large radius (12px / rounded-xl, 183 uses). Modal panels, search inputs, large cards."
+      },
+      "2xl": {
+        "value": "16",
+        "type": "borderRadius",
+        "description": "2X large radius (16px / rounded-2xl). Hero cards, prominent containers."
+      },
+      "3xl": {
+        "value": "24",
+        "type": "borderRadius",
+        "description": "3X large radius (24px / rounded-3xl). Pill shapes, large containers."
+      },
+      "full": {
+        "value": "9999",
+        "type": "borderRadius",
+        "description": "Full radius (rounded-full, 584 uses). Avatars, circular buttons, chips, badges."
+      }
+    },
+    "boxShadow": {
+      "none": {
+        "value": "none",
+        "type": "boxShadow",
+        "description": "No shadow."
+      },
+      "sm": {
+        "value": "0 1px 2px 0 rgba(0, 0, 0, 0.05)",
+        "type": "boxShadow",
+        "description": "Small shadow (112 uses). Subtle card elevation, buttons."
+      },
+      "default": {
+        "value": "0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1)",
+        "type": "boxShadow",
+        "description": "Default shadow. Standard card elevation."
+      },
+      "md": {
+        "value": "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1)",
+        "type": "boxShadow",
+        "description": "Medium shadow (28 uses). Elevated cards, hover states."
+      },
+      "lg": {
+        "value": "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1)",
+        "type": "boxShadow",
+        "description": "Large shadow (60 uses). Dropdowns, modals, prominent cards."
+      },
+      "xl": {
+        "value": "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1)",
+        "type": "boxShadow",
+        "description": "Extra large shadow. Floating panels, popovers."
+      },
+      "focus-ring": {
+        "value": "0 0 0 3px rgba(0, 31, 84, 0.1)",
+        "type": "boxShadow",
+        "description": "Focus ring shadow. Input focus state (brand navy at 10% opacity)."
+      },
+      "button-hover": {
+        "value": "0 4px 12px rgba(0, 31, 84, 0.3)",
+        "type": "boxShadow",
+        "description": "Button hover shadow. Primary CTA hover state."
+      },
+      "card-hover": {
+        "value": "0 10px 25px rgba(0, 0, 0, 0.1)",
+        "type": "boxShadow",
+        "description": "Card hover shadow. Search results dropdown, expanded cards."
+      }
+    },
+    "borderWidth": {
+      "none": {
+        "value": "0",
+        "type": "borderWidth",
+        "description": "No border."
+      },
+      "default": {
+        "value": "1",
+        "type": "borderWidth",
+        "description": "Standard border (1px). Card borders, table rows, dividers."
+      },
+      "2": {
+        "value": "2",
+        "type": "borderWidth",
+        "description": "Medium border (2px). Active input focus, platform chips, search inputs."
+      },
+      "4": {
+        "value": "4",
+        "type": "borderWidth",
+        "description": "Thick border (4px). Sidebar active indicator, emphasis borders."
+      }
+    },
+    "opacity": {
+      "0": {
+        "value": "0",
+        "type": "opacity",
+        "description": "Fully transparent. Hidden elements, fade-out animations."
+      },
+      "5": {
+        "value": "0.05",
+        "type": "opacity",
+        "description": "Nearly transparent. Subtle overlays."
+      },
+      "10": {
+        "value": "0.1",
+        "type": "opacity",
+        "description": "Very faint. Focus ring backgrounds."
+      },
+      "20": {
+        "value": "0.2",
+        "type": "opacity",
+        "description": "Light transparency. Skeleton loaders."
+      },
+      "30": {
+        "value": "0.3",
+        "type": "opacity",
+        "description": "Button hover shadow opacity."
+      },
+      "50": {
+        "value": "0.5",
+        "type": "opacity",
+        "description": "Half transparent. Modal overlays, disabled states."
+      },
+      "60": {
+        "value": "0.6",
+        "type": "opacity",
+        "description": "Slightly transparent. Disabled button opacity, inactive chips."
+      },
+      "75": {
+        "value": "0.75",
+        "type": "opacity",
+        "description": "Mostly opaque. Secondary overlays."
+      },
+      "100": {
+        "value": "1",
+        "type": "opacity",
+        "description": "Fully opaque. Default state."
+      }
+    },
+    "sizing": {
+      "avatar": {
+        "xs": {
+          "value": "24",
+          "type": "sizing",
+          "description": "Extra small avatar (24px). Inline mentions, compact lists."
+        },
+        "sm": {
+          "value": "32",
+          "type": "sizing",
+          "description": "Small avatar (32px). Comment threads, compact cards."
+        },
+        "md": {
+          "value": "40",
+          "type": "sizing",
+          "description": "Medium avatar (40px). Standard list items."
+        },
+        "lg": {
+          "value": "48",
+          "type": "sizing",
+          "description": "Large avatar (48px). Search result rows, profile cards."
+        },
+        "xl": {
+          "value": "64",
+          "type": "sizing",
+          "description": "Extra large avatar (64px). Profile headers."
+        },
+        "2xl": {
+          "value": "96",
+          "type": "sizing",
+          "description": "2X large avatar (96px). Main profile page avatar."
+        }
+      },
+      "icon": {
+        "xs": {
+          "value": "12",
+          "type": "sizing",
+          "description": "Extra small icon (12px). Platform badge icons."
+        },
+        "sm": {
+          "value": "16",
+          "type": "sizing",
+          "description": "Small icon (16px). Inline icons, platform chip icons."
+        },
+        "md": {
+          "value": "20",
+          "type": "sizing",
+          "description": "Medium icon (20px). Standard Lucide icons."
+        },
+        "lg": {
+          "value": "24",
+          "type": "sizing",
+          "description": "Large icon (24px). Navigation icons, action buttons."
+        },
+        "xl": {
+          "value": "32",
+          "type": "sizing",
+          "description": "Extra large icon (32px). Empty state icons."
+        }
+      },
+      "sidebar": {
+        "width-collapsed": {
+          "value": "64",
+          "type": "sizing",
+          "description": "Collapsed sidebar width (64px)."
+        },
+        "width-expanded": {
+          "value": "256",
+          "type": "sizing",
+          "description": "Expanded sidebar width (256px / w-64)."
+        }
+      },
+      "container": {
+        "sm": {
+          "value": "384",
+          "type": "sizing",
+          "description": "Small container (384px / max-w-sm). Auth forms."
+        },
+        "md": {
+          "value": "448",
+          "type": "sizing",
+          "description": "Medium container (448px / max-w-md). Modals, dialogs."
+        },
+        "lg": {
+          "value": "512",
+          "type": "sizing",
+          "description": "Large container (512px / max-w-lg). Wide modals."
+        },
+        "xl": {
+          "value": "576",
+          "type": "sizing",
+          "description": "Extra large container (576px / max-w-xl). Content panels."
+        },
+        "2xl": {
+          "value": "672",
+          "type": "sizing",
+          "description": "2X large container (672px / max-w-2xl). Main content area."
+        },
+        "search": {
+          "value": "600",
+          "type": "sizing",
+          "description": "Search container max width (600px). Search bar component."
+        }
+      }
+    },
+    "typography": {
+      "display-lg": {
+        "value": {
+          "fontFamily": "{fontFamily.body}",
+          "fontSize": "{fontSize.5xl}",
+          "fontWeight": "{fontWeight.bold}",
+          "lineHeight": "{lineHeight.tight}",
+          "letterSpacing": "{letterSpacing.tighter}"
+        },
+        "type": "typography",
+        "description": "Display Large. Hero headings, big stat numbers (48px bold)."
+      },
+      "display-sm": {
+        "value": {
+          "fontFamily": "{fontFamily.body}",
+          "fontSize": "{fontSize.4xl}",
+          "fontWeight": "{fontWeight.bold}",
+          "lineHeight": "{lineHeight.tight}",
+          "letterSpacing": "{letterSpacing.tight}"
+        },
+        "type": "typography",
+        "description": "Display Small. Page hero titles (36px bold)."
+      },
+      "heading-xl": {
+        "value": {
+          "fontFamily": "{fontFamily.body}",
+          "fontSize": "{fontSize.3xl}",
+          "fontWeight": "{fontWeight.bold}",
+          "lineHeight": "{lineHeight.tight}",
+          "letterSpacing": "{letterSpacing.tight}"
+        },
+        "type": "typography",
+        "description": "Heading XL. Page titles (30px bold)."
+      },
+      "heading-lg": {
+        "value": {
+          "fontFamily": "{fontFamily.body}",
+          "fontSize": "{fontSize.2xl}",
+          "fontWeight": "{fontWeight.bold}",
+          "lineHeight": "{lineHeight.tight}",
+          "letterSpacing": "{letterSpacing.tight}"
+        },
+        "type": "typography",
+        "description": "Heading Large. Section headings (24px bold)."
+      },
+      "heading-md": {
+        "value": {
+          "fontFamily": "{fontFamily.body}",
+          "fontSize": "{fontSize.xl}",
+          "fontWeight": "{fontWeight.semibold}",
+          "lineHeight": "{lineHeight.snug}",
+          "letterSpacing": "{letterSpacing.normal}"
+        },
+        "type": "typography",
+        "description": "Heading Medium. Card titles, subsections (20px semibold)."
+      },
+      "heading-sm": {
+        "value": {
+          "fontFamily": "{fontFamily.body}",
+          "fontSize": "{fontSize.lg}",
+          "fontWeight": "{fontWeight.semibold}",
+          "lineHeight": "{lineHeight.snug}",
+          "letterSpacing": "{letterSpacing.normal}"
+        },
+        "type": "typography",
+        "description": "Heading Small. Widget titles, card headers (18px semibold)."
+      },
+      "body-lg": {
+        "value": {
+          "fontFamily": "{fontFamily.body}",
+          "fontSize": "{fontSize.base}",
+          "fontWeight": "{fontWeight.normal}",
+          "lineHeight": "{lineHeight.normal}",
+          "letterSpacing": "{letterSpacing.normal}"
+        },
+        "type": "typography",
+        "description": "Body Large. Paragraph text, descriptions (16px regular)."
+      },
+      "body-md": {
+        "value": {
+          "fontFamily": "{fontFamily.body}",
+          "fontSize": "{fontSize.sm}",
+          "fontWeight": "{fontWeight.normal}",
+          "lineHeight": "{lineHeight.normal}",
+          "letterSpacing": "{letterSpacing.normal}"
+        },
+        "type": "typography",
+        "description": "Body Medium. Most common text style (14px regular). Form labels, table cells."
+      },
+      "body-md-medium": {
+        "value": {
+          "fontFamily": "{fontFamily.body}",
+          "fontSize": "{fontSize.sm}",
+          "fontWeight": "{fontWeight.medium}",
+          "lineHeight": "{lineHeight.normal}",
+          "letterSpacing": "{letterSpacing.normal}"
+        },
+        "type": "typography",
+        "description": "Body Medium (medium weight). Nav items, form labels, chip text (14px medium)."
+      },
+      "body-sm": {
+        "value": {
+          "fontFamily": "{fontFamily.body}",
+          "fontSize": "{fontSize.xs}",
+          "fontWeight": "{fontWeight.normal}",
+          "lineHeight": "{lineHeight.normal}",
+          "letterSpacing": "{letterSpacing.normal}"
+        },
+        "type": "typography",
+        "description": "Body Small. Captions, timestamps, helper text (12px regular)."
+      },
+      "body-xs": {
+        "value": {
+          "fontFamily": "{fontFamily.body}",
+          "fontSize": "{fontSize.2xs}",
+          "fontWeight": "{fontWeight.medium}",
+          "lineHeight": "{lineHeight.normal}",
+          "letterSpacing": "{letterSpacing.normal}"
+        },
+        "type": "typography",
+        "description": "Body Extra Small. Platform badges, micro labels (11px medium)."
+      },
+      "label": {
+        "value": {
+          "fontFamily": "{fontFamily.body}",
+          "fontSize": "{fontSize.sm}",
+          "fontWeight": "{fontWeight.semibold}",
+          "lineHeight": "{lineHeight.normal}",
+          "letterSpacing": "{letterSpacing.normal}"
+        },
+        "type": "typography",
+        "description": "Label. Form labels, button text (14px semibold)."
+      },
+      "overline": {
+        "value": {
+          "fontFamily": "{fontFamily.body}",
+          "fontSize": "{fontSize.xs}",
+          "fontWeight": "{fontWeight.semibold}",
+          "lineHeight": "{lineHeight.normal}",
+          "letterSpacing": "{letterSpacing.wider}"
+        },
+        "type": "typography",
+        "description": "Overline. Section category labels, uppercase tags (12px semibold, wide tracking)."
+      },
+      "stat-value": {
+        "value": {
+          "fontFamily": "{fontFamily.body}",
+          "fontSize": "{fontSize.2xl}",
+          "fontWeight": "{fontWeight.bold}",
+          "lineHeight": "{lineHeight.none}",
+          "letterSpacing": "{letterSpacing.tight}"
+        },
+        "type": "typography",
+        "description": "Stat Value. Dashboard KPI numbers, metric values (24px bold)."
+      },
+      "stat-label": {
+        "value": {
+          "fontFamily": "{fontFamily.body}",
+          "fontSize": "{fontSize.xs}",
+          "fontWeight": "{fontWeight.medium}",
+          "lineHeight": "{lineHeight.normal}",
+          "letterSpacing": "{letterSpacing.normal}"
+        },
+        "type": "typography",
+        "description": "Stat Label. Metric labels below stat values (12px medium)."
+      }
+    },
+    "animation": {
+      "duration": {
+        "fast": {
+          "value": "150ms",
+          "type": "other",
+          "description": "Fast transition. Hover color changes."
+        },
+        "normal": {
+          "value": "200ms",
+          "type": "other",
+          "description": "Normal transition. Most UI interactions, button hovers."
+        },
+        "slow": {
+          "value": "300ms",
+          "type": "other",
+          "description": "Slow transition. Slide-in panels, modal entrances."
+        },
+        "entrance": {
+          "value": "500ms",
+          "type": "other",
+          "description": "Entrance animation. Fade-in content on page load."
+        }
+      },
+      "easing": {
+        "default": {
+          "value": "ease",
+          "type": "other",
+          "description": "Default easing. General transitions."
+        },
+        "entrance": {
+          "value": "ease-out",
+          "type": "other",
+          "description": "Entrance easing. Elements appearing on screen."
+        },
+        "exit": {
+          "value": "ease-in",
+          "type": "other",
+          "description": "Exit easing. Elements leaving screen."
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,639 @@
+[
+  {
+    "id": "SCR-S-UTIL-1",
+    "success": true,
+    "filePath": "/Users/marco/Desktop/VibeCode/heycreator-ui-test--main/user-story-map/versions/v1.0.3/screenshots/shared/SCR-S-UTIL-1.png",
+    "fileSize": 107950,
+    "capturedAt": "2026-03-05T19:22:24.489Z"
+  },
+  {
+    "id": "SCR-S-UTIL-2",
+    "success": true,
+    "filePath": "/Users/marco/Desktop/VibeCode/heycreator-ui-test--main/user-story-map/versions/v1.0.3/screenshots/shared/SCR-S-UTIL-2.png",
+    "fileSize": 190324,
+    "capturedAt": "2026-03-05T19:22:26.130Z"
+  },
+  {
+    "id": "SCR-S-UTIL-3",
+    "success": true,
+    "filePath": "/Users/marco/Desktop/VibeCode/heycreator-ui-test--main/user-story-map/versions/v1.0.3/screenshots/shared/SCR-S-UTIL-3.png",
+    "fileSize": 192172,
+    "capturedAt": "2026-03-05T19:22:27.755Z"
+  },
+  {
+    "id": "SCR-S-UTIL-4",
+    "success": true,
+    "filePath": "/Users/marco/Desktop/VibeCode/heycreator-ui-test--main/user-story-map/versions/v1.0.3/screenshots/shared/SCR-S-UTIL-4.png",
+    "fileSize": 164468,
+    "capturedAt": "2026-03-05T19:22:29.362Z"
+  },
+  {
+    "id": "SCR-S-UTIL-5",
+    "success": true,
+    "filePath": "/Users/marco/Desktop/VibeCode/heycreator-ui-test--main/user-story-map/versions/v1.0.3/screenshots/shared/SCR-S-UTIL-5.png",
+    "fileSize": 78206,
+    "capturedAt": "2026-03-05T19:22:31.051Z"
+  },
+  {
+    "id": "SCR-S-UTIL-6",
+    "success": true,
+    "filePath": "/Users/marco/Desktop/VibeCode/heycreator-ui-test--main/user-story-map/versions/v1.0.3/screenshots/shared/SCR-S-UTIL-6.png",
+    "fileSize": 142829,
+    "capturedAt": "2026-03-05T19:22:34.887Z"
+  },
+  {
+    "id": "SCR-B-AUTH-1",
+    "success": true,
+    "filePath": "/Users/marco/Desktop/VibeCode/heycreator-ui-test--main/user-story-map/versions/v1.0.3/screenshots/brand/auth/SCR-B-AUTH-1.png",
+    "fileSize": 15740,
+    "capturedAt": "2026-03-05T19:22:36.665Z"
+  },
+  {
+    "id": "SCR-B-AUTH-2",
+    "success": true,
+    "filePath": "/Users/marco/Desktop/VibeCode/heycreator-ui-test--main/user-story-map/versions/v1.0.3/screenshots/brand/auth/SCR-B-AUTH-2.png",
+    "fileSize": 55733,
+    "capturedAt": "2026-03-05T19:22:38.582Z"
+  },
+  {
+    "id": "SCR-B-AUTH-4-S1",
+    "success": true,
+    "filePath": "/Users/marco/Desktop/VibeCode/heycreator-ui-test--main/user-story-map/versions/v1.0.3/screenshots/brand/auth/SCR-B-AUTH-4-S1.png",
+    "fileSize": 34901,
+    "capturedAt": "2026-03-05T19:22:40.489Z"
+  },
+  {
+    "id": "SCR-B-AUTH-4-S2",
+    "success": true,
+    "filePath": "/Users/marco/Desktop/VibeCode/heycreator-ui-test--main/user-story-map/versions/v1.0.3/screenshots/brand/auth/SCR-B-AUTH-4-S2.png",
+    "fileSize": 34901,
+    "capturedAt": "2026-03-05T19:22:42.334Z"
+  },
+  {
+    "id": "SCR-B-AUTH-4-S3",
+    "success": true,
+    "filePath": "/Users/marco/Desktop/VibeCode/heycreator-ui-test--main/user-story-map/versions/v1.0.3/screenshots/brand/auth/SCR-B-AUTH-4-S3.png",
+    "fileSize": 83577,
+    "capturedAt": "2026-03-05T19:22:44.040Z"
+  },
+  {
+    "id": "SCR-B-AUTH-4-SUCCESS",
+    "success": true,
+    "filePath": "/Users/marco/Desktop/VibeCode/heycreator-ui-test--main/user-story-map/versions/v1.0.3/screenshots/brand/auth/SCR-B-AUTH-4-SUCCESS.png",
+    "fileSize": 15740,
+    "capturedAt": "2026-03-05T19:22:45.588Z"
+  },
+  {
+    "id": "SCR-B-AUTH-5-VERIFY",
+    "success": true,
+    "filePath": "/Users/marco/Desktop/VibeCode/heycreator-ui-test--main/user-story-map/versions/v1.0.3/screenshots/brand/auth/SCR-B-AUTH-5-VERIFY.png",
+    "fileSize": 34901,
+    "capturedAt": "2026-03-05T19:22:47.537Z"
+  },
+  {
+    "id": "SCR-B-AUTH-5-VERIFIED",
+    "success": true,
+    "filePath": "/Users/marco/Desktop/VibeCode/heycreator-ui-test--main/user-story-map/versions/v1.0.3/screenshots/brand/auth/SCR-B-AUTH-5-VERIFIED.png",
+    "fileSize": 27011,
+    "capturedAt": "2026-03-05T19:22:49.651Z"
+  },
+  {
+    "id": "SCR-B-AUTH-6-FORGOT",
+    "success": true,
+    "filePath": "/Users/marco/Desktop/VibeCode/heycreator-ui-test--main/user-story-map/versions/v1.0.3/screenshots/brand/auth/SCR-B-AUTH-6-FORGOT.png",
+    "fileSize": 35708,
+    "capturedAt": "2026-03-05T19:22:51.645Z"
+  },
+  {
+    "id": "SCR-B-AUTH-6-CODE",
+    "success": true,
+    "filePath": "/Users/marco/Desktop/VibeCode/heycreator-ui-test--main/user-story-map/versions/v1.0.3/screenshots/brand/auth/SCR-B-AUTH-6-CODE.png",
+    "fileSize": 15740,
+    "capturedAt": "2026-03-05T19:22:53.207Z"
+  },
+  {
+    "id": "SCR-B-AUTH-6-RESET",
+    "success": true,
+    "filePath": "/Users/marco/Desktop/VibeCode/heycreator-ui-test--main/user-story-map/versions/v1.0.3/screenshots/brand/auth/SCR-B-AUTH-6-RESET.png",
+    "fileSize": 30256,
+    "capturedAt": "2026-03-05T19:22:55.155Z"
+  },
+  {
+    "id": "SCR-B-AUTH-6-SUCCESS",
+    "success": true,
+    "filePath": "/Users/marco/Desktop/VibeCode/heycreator-ui-test--main/user-story-map/versions/v1.0.3/screenshots/brand/auth/SCR-B-AUTH-6-SUCCESS.png",
+    "fileSize": 38085,
+    "capturedAt": "2026-03-05T19:22:56.817Z"
+  },
+  {
+    "id": "SCR-B-AUTH-8",
+    "success": true,
+    "filePath": "/Users/marco/Desktop/VibeCode/heycreator-ui-test--main/user-story-map/versions/v1.0.3/screenshots/brand/auth/SCR-B-AUTH-8.png",
+    "fileSize": 65364,
+    "capturedAt": "2026-03-05T19:22:58.578Z"
+  },
+  {
+    "id": "SCR-B-AUTH-7",
+    "success": true,
+    "filePath": "/Users/marco/Desktop/VibeCode/heycreator-ui-test--main/user-story-map/versions/v1.0.3/screenshots/brand/auth/SCR-B-AUTH-7.png",
+    "fileSize": 32253,
+    "capturedAt": "2026-03-05T19:23:00.263Z"
+  },
+  {
+    "id": "SCR-I-AUTH-1",
+    "success": true,
+    "filePath": "/Users/marco/Desktop/VibeCode/heycreator-ui-test--main/user-story-map/versions/v1.0.3/screenshots/influencer/auth/SCR-I-AUTH-1.png",
+    "fileSize": 15740,
+    "capturedAt": "2026-03-05T19:23:01.694Z"
+  },
+  {
+    "id": "SCR-I-AUTH-2",
+    "success": true,
+    "filePath": "/Users/marco/Desktop/VibeCode/heycreator-ui-test--main/user-story-map/versions/v1.0.3/screenshots/influencer/auth/SCR-I-AUTH-2.png",
+    "fileSize": 55861,
+    "capturedAt": "2026-03-05T19:23:03.395Z"
+  },
+  {
+    "id": "SCR-I-AUTH-4",
+    "success": true,
+    "filePath": "/Users/marco/Desktop/VibeCode/heycreator-ui-test--main/user-story-map/versions/v1.0.3/screenshots/influencer/auth/SCR-I-AUTH-4.png",
+    "fileSize": 40301,
+    "capturedAt": "2026-03-05T19:23:05.099Z"
+  },
+  {
+    "id": "SCR-I-AUTH-5-VERIFY",
+    "success": true,
+    "filePath": "/Users/marco/Desktop/VibeCode/heycreator-ui-test--main/user-story-map/versions/v1.0.3/screenshots/influencer/auth/SCR-I-AUTH-5-VERIFY.png",
+    "fileSize": 40301,
+    "capturedAt": "2026-03-05T19:23:07.076Z"
+  },
+  {
+    "id": "SCR-I-AUTH-5-VERIFIED",
+    "success": true,
+    "filePath": "/Users/marco/Desktop/VibeCode/heycreator-ui-test--main/user-story-map/versions/v1.0.3/screenshots/influencer/auth/SCR-I-AUTH-5-VERIFIED.png",
+    "fileSize": 27011,
+    "capturedAt": "2026-03-05T19:23:08.780Z"
+  },
+  {
+    "id": "SCR-I-AUTH-6-SOCIAL",
+    "success": true,
+    "filePath": "/Users/marco/Desktop/VibeCode/heycreator-ui-test--main/user-story-map/versions/v1.0.3/screenshots/influencer/auth/SCR-I-AUTH-6-SOCIAL.png",
+    "fileSize": 40301,
+    "capturedAt": "2026-03-05T19:23:10.587Z"
+  },
+  {
+    "id": "SCR-I-AUTH-6-SUCCESS",
+    "success": true,
+    "filePath": "/Users/marco/Desktop/VibeCode/heycreator-ui-test--main/user-story-map/versions/v1.0.3/screenshots/influencer/auth/SCR-I-AUTH-6-SUCCESS.png",
+    "fileSize": 61964,
+    "capturedAt": "2026-03-05T19:23:12.302Z"
+  },
+  {
+    "id": "SCR-I-AUTH-7-FORGOT",
+    "success": true,
+    "filePath": "/Users/marco/Desktop/VibeCode/heycreator-ui-test--main/user-story-map/versions/v1.0.3/screenshots/influencer/auth/SCR-I-AUTH-7-FORGOT.png",
+    "fileSize": 33817,
+    "capturedAt": "2026-03-05T19:23:13.867Z"
+  },
+  {
+    "id": "SCR-I-AUTH-7-RESET",
+    "success": true,
+    "filePath": "/Users/marco/Desktop/VibeCode/heycreator-ui-test--main/user-story-map/versions/v1.0.3/screenshots/influencer/auth/SCR-I-AUTH-7-RESET.png",
+    "fileSize": 30551,
+    "capturedAt": "2026-03-05T19:23:15.423Z"
+  },
+  {
+    "id": "SCR-I-AUTH-7-SUCCESS",
+    "success": true,
+    "filePath": "/Users/marco/Desktop/VibeCode/heycreator-ui-test--main/user-story-map/versions/v1.0.3/screenshots/influencer/auth/SCR-I-AUTH-7-SUCCESS.png",
+    "fileSize": 38085,
+    "capturedAt": "2026-03-05T19:23:17.420Z"
+  },
+  {
+    "id": "SCR-I-AUTH-8",
+    "success": true,
+    "filePath": "/Users/marco/Desktop/VibeCode/heycreator-ui-test--main/user-story-map/versions/v1.0.3/screenshots/influencer/auth/SCR-I-AUTH-8.png",
+    "fileSize": 60388,
+    "capturedAt": "2026-03-05T19:23:19.136Z"
+  },
+  {
+    "id": "SCR-I-AUTH-EXT",
+    "success": true,
+    "filePath": "/Users/marco/Desktop/VibeCode/heycreator-ui-test--main/user-story-map/versions/v1.0.3/screenshots/influencer/auth/SCR-I-AUTH-EXT.png",
+    "fileSize": 45456,
+    "capturedAt": "2026-03-05T19:23:20.885Z"
+  },
+  {
+    "id": "SCR-B-DASH-1",
+    "success": true,
+    "filePath": "/Users/marco/Desktop/VibeCode/heycreator-ui-test--main/user-story-map/versions/v1.0.3/screenshots/brand/dashboard/SCR-B-DASH-1.png",
+    "fileSize": 107950,
+    "capturedAt": "2026-03-05T19:23:23.659Z"
+  },
+  {
+    "id": "SCR-B-DASH-4",
+    "success": true,
+    "filePath": "/Users/marco/Desktop/VibeCode/heycreator-ui-test--main/user-story-map/versions/v1.0.3/screenshots/brand/dashboard/SCR-B-DASH-4.png",
+    "fileSize": 107950,
+    "capturedAt": "2026-03-05T19:23:26.258Z"
+  },
+  {
+    "id": "SCR-B-DISC-1",
+    "success": true,
+    "filePath": "/Users/marco/Desktop/VibeCode/heycreator-ui-test--main/user-story-map/versions/v1.0.3/screenshots/brand/discovery/SCR-B-DISC-1.png",
+    "fileSize": 129482,
+    "capturedAt": "2026-03-05T19:23:28.356Z"
+  },
+  {
+    "id": "SCR-B-DISC-2",
+    "success": true,
+    "filePath": "/Users/marco/Desktop/VibeCode/heycreator-ui-test--main/user-story-map/versions/v1.0.3/screenshots/brand/discovery/SCR-B-DISC-2.png",
+    "fileSize": 129482,
+    "capturedAt": "2026-03-05T19:23:29.964Z"
+  },
+  {
+    "id": "SCR-B-DISC-4",
+    "success": true,
+    "filePath": "/Users/marco/Desktop/VibeCode/heycreator-ui-test--main/user-story-map/versions/v1.0.3/screenshots/brand/discovery/SCR-B-DISC-4.png",
+    "fileSize": 90252,
+    "capturedAt": "2026-03-05T19:23:31.801Z"
+  },
+  {
+    "id": "SCR-B-DISC-6-LIST",
+    "success": true,
+    "filePath": "/Users/marco/Desktop/VibeCode/heycreator-ui-test--main/user-story-map/versions/v1.0.3/screenshots/brand/discovery/SCR-B-DISC-6-LIST.png",
+    "fileSize": 90252,
+    "capturedAt": "2026-03-05T19:23:33.319Z"
+  },
+  {
+    "id": "SCR-B-DISC-9",
+    "success": true,
+    "filePath": "/Users/marco/Desktop/VibeCode/heycreator-ui-test--main/user-story-map/versions/v1.0.3/screenshots/brand/discovery/SCR-B-DISC-9.png",
+    "fileSize": 129482,
+    "capturedAt": "2026-03-05T19:23:34.960Z"
+  },
+  {
+    "id": "SCR-B-CAMP-1",
+    "success": true,
+    "filePath": "/Users/marco/Desktop/VibeCode/heycreator-ui-test--main/user-story-map/versions/v1.0.3/screenshots/brand/campaigns/SCR-B-CAMP-1.png",
+    "fileSize": 116535,
+    "capturedAt": "2026-03-05T19:23:36.872Z"
+  },
+  {
+    "id": "SCR-B-CAMP-2-S1",
+    "success": true,
+    "filePath": "/Users/marco/Desktop/VibeCode/heycreator-ui-test--main/user-story-map/versions/v1.0.3/screenshots/brand/campaigns/SCR-B-CAMP-2-S1.png",
+    "fileSize": 96685,
+    "capturedAt": "2026-03-05T19:23:38.672Z"
+  },
+  {
+    "id": "SCR-B-CAMP-2-S2",
+    "success": true,
+    "filePath": "/Users/marco/Desktop/VibeCode/heycreator-ui-test--main/user-story-map/versions/v1.0.3/screenshots/brand/campaigns/SCR-B-CAMP-2-S2.png",
+    "fileSize": 96685,
+    "capturedAt": "2026-03-05T19:23:40.180Z"
+  },
+  {
+    "id": "SCR-B-CAMP-2-S3",
+    "success": true,
+    "filePath": "/Users/marco/Desktop/VibeCode/heycreator-ui-test--main/user-story-map/versions/v1.0.3/screenshots/brand/campaigns/SCR-B-CAMP-2-S3.png",
+    "fileSize": 96685,
+    "capturedAt": "2026-03-05T19:23:41.672Z"
+  },
+  {
+    "id": "SCR-B-CAMP-2-S4",
+    "success": true,
+    "filePath": "/Users/marco/Desktop/VibeCode/heycreator-ui-test--main/user-story-map/versions/v1.0.3/screenshots/brand/campaigns/SCR-B-CAMP-2-S4.png",
+    "fileSize": 96685,
+    "capturedAt": "2026-03-05T19:23:43.192Z"
+  },
+  {
+    "id": "SCR-B-CAMP-2-S5",
+    "success": true,
+    "filePath": "/Users/marco/Desktop/VibeCode/heycreator-ui-test--main/user-story-map/versions/v1.0.3/screenshots/brand/campaigns/SCR-B-CAMP-2-S5.png",
+    "fileSize": 96685,
+    "capturedAt": "2026-03-05T19:23:44.701Z"
+  },
+  {
+    "id": "SCR-B-CAMP-2-S6",
+    "success": true,
+    "filePath": "/Users/marco/Desktop/VibeCode/heycreator-ui-test--main/user-story-map/versions/v1.0.3/screenshots/brand/campaigns/SCR-B-CAMP-2-S6.png",
+    "fileSize": 96685,
+    "capturedAt": "2026-03-05T19:23:46.227Z"
+  },
+  {
+    "id": "SCR-B-CAMP-4-OVERVIEW",
+    "success": true,
+    "filePath": "/Users/marco/Desktop/VibeCode/heycreator-ui-test--main/user-story-map/versions/v1.0.3/screenshots/brand/campaigns/SCR-B-CAMP-4-OVERVIEW.png",
+    "fileSize": 110530,
+    "capturedAt": "2026-03-05T19:23:48.738Z"
+  },
+  {
+    "id": "SCR-B-CAMP-4-CREATORS",
+    "success": true,
+    "filePath": "/Users/marco/Desktop/VibeCode/heycreator-ui-test--main/user-story-map/versions/v1.0.3/screenshots/brand/campaigns/SCR-B-CAMP-4-CREATORS.png",
+    "fileSize": 110530,
+    "capturedAt": "2026-03-05T19:23:50.354Z"
+  },
+  {
+    "id": "SCR-B-CAMP-4-CONTENT",
+    "success": true,
+    "filePath": "/Users/marco/Desktop/VibeCode/heycreator-ui-test--main/user-story-map/versions/v1.0.3/screenshots/brand/campaigns/SCR-B-CAMP-4-CONTENT.png",
+    "fileSize": 110530,
+    "capturedAt": "2026-03-05T19:23:52.016Z"
+  },
+  {
+    "id": "SCR-B-CAMP-4-ANALYTICS",
+    "success": true,
+    "filePath": "/Users/marco/Desktop/VibeCode/heycreator-ui-test--main/user-story-map/versions/v1.0.3/screenshots/brand/campaigns/SCR-B-CAMP-4-ANALYTICS.png",
+    "fileSize": 110530,
+    "capturedAt": "2026-03-05T19:23:53.615Z"
+  },
+  {
+    "id": "SCR-B-CAMP-6",
+    "success": true,
+    "filePath": "/Users/marco/Desktop/VibeCode/heycreator-ui-test--main/user-story-map/versions/v1.0.3/screenshots/brand/campaigns/SCR-B-CAMP-6.png",
+    "fileSize": 93782,
+    "capturedAt": "2026-03-05T19:23:55.859Z"
+  },
+  {
+    "id": "SCR-B-CREAT-1",
+    "success": true,
+    "filePath": "/Users/marco/Desktop/VibeCode/heycreator-ui-test--main/user-story-map/versions/v1.0.3/screenshots/brand/creators/SCR-B-CREAT-1.png",
+    "fileSize": 135555,
+    "capturedAt": "2026-03-05T19:23:57.853Z"
+  },
+  {
+    "id": "SCR-B-CREAT-2",
+    "success": true,
+    "filePath": "/Users/marco/Desktop/VibeCode/heycreator-ui-test--main/user-story-map/versions/v1.0.3/screenshots/brand/creators/SCR-B-CREAT-2.png",
+    "fileSize": 135555,
+    "capturedAt": "2026-03-05T19:23:59.489Z"
+  },
+  {
+    "id": "SCR-B-CREAT-4",
+    "success": true,
+    "filePath": "/Users/marco/Desktop/VibeCode/heycreator-ui-test--main/user-story-map/versions/v1.0.3/screenshots/brand/creators/SCR-B-CREAT-4.png",
+    "fileSize": 135555,
+    "capturedAt": "2026-03-05T19:24:01.109Z"
+  },
+  {
+    "id": "SCR-B-CREAT-7",
+    "success": true,
+    "filePath": "/Users/marco/Desktop/VibeCode/heycreator-ui-test--main/user-story-map/versions/v1.0.3/screenshots/brand/creators/SCR-B-CREAT-7.png",
+    "fileSize": 135555,
+    "capturedAt": "2026-03-05T19:24:02.783Z"
+  },
+  {
+    "id": "SCR-B-PROF-1",
+    "success": true,
+    "filePath": "/Users/marco/Desktop/VibeCode/heycreator-ui-test--main/user-story-map/versions/v1.0.3/screenshots/brand/profile/SCR-B-PROF-1.png",
+    "fileSize": 47005,
+    "capturedAt": "2026-03-05T19:24:05.523Z"
+  },
+  {
+    "id": "SCR-B-PROF-2",
+    "success": true,
+    "filePath": "/Users/marco/Desktop/VibeCode/heycreator-ui-test--main/user-story-map/versions/v1.0.3/screenshots/brand/profile/SCR-B-PROF-2.png",
+    "fileSize": 47005,
+    "capturedAt": "2026-03-05T19:24:07.193Z"
+  },
+  {
+    "id": "SCR-B-PROF-3",
+    "success": true,
+    "filePath": "/Users/marco/Desktop/VibeCode/heycreator-ui-test--main/user-story-map/versions/v1.0.3/screenshots/brand/profile/SCR-B-PROF-3.png",
+    "fileSize": 47005,
+    "capturedAt": "2026-03-05T19:24:08.872Z"
+  },
+  {
+    "id": "SCR-B-PROF-4",
+    "success": true,
+    "filePath": "/Users/marco/Desktop/VibeCode/heycreator-ui-test--main/user-story-map/versions/v1.0.3/screenshots/brand/profile/SCR-B-PROF-4.png",
+    "fileSize": 47005,
+    "capturedAt": "2026-03-05T19:24:10.542Z"
+  },
+  {
+    "id": "SCR-B-SETT-1",
+    "success": true,
+    "filePath": "/Users/marco/Desktop/VibeCode/heycreator-ui-test--main/user-story-map/versions/v1.0.3/screenshots/brand/profile/SCR-B-SETT-1.png",
+    "fileSize": 72006,
+    "capturedAt": "2026-03-05T19:24:12.436Z"
+  },
+  {
+    "id": "SCR-B-NOTIF-1",
+    "success": true,
+    "filePath": "/Users/marco/Desktop/VibeCode/heycreator-ui-test--main/user-story-map/versions/v1.0.3/screenshots/brand/notifications/SCR-B-NOTIF-1.png",
+    "fileSize": 79056,
+    "capturedAt": "2026-03-05T19:24:14.224Z"
+  },
+  {
+    "id": "SCR-B-NOTIF-2",
+    "success": true,
+    "filePath": "/Users/marco/Desktop/VibeCode/heycreator-ui-test--main/user-story-map/versions/v1.0.3/screenshots/brand/notifications/SCR-B-NOTIF-2.png",
+    "fileSize": 79056,
+    "capturedAt": "2026-03-05T19:24:15.748Z"
+  },
+  {
+    "id": "SCR-B-ANAL-1",
+    "success": true,
+    "filePath": "/Users/marco/Desktop/VibeCode/heycreator-ui-test--main/user-story-map/versions/v1.0.3/screenshots/brand/analytics/SCR-B-ANAL-1.png",
+    "fileSize": 120704,
+    "capturedAt": "2026-03-05T19:24:17.888Z"
+  },
+  {
+    "id": "SCR-B-ANAL-2",
+    "success": true,
+    "filePath": "/Users/marco/Desktop/VibeCode/heycreator-ui-test--main/user-story-map/versions/v1.0.3/screenshots/brand/analytics/SCR-B-ANAL-2.png",
+    "fileSize": 120704,
+    "capturedAt": "2026-03-05T19:24:19.450Z"
+  },
+  {
+    "id": "SCR-I-DASH-1",
+    "success": true,
+    "filePath": "/Users/marco/Desktop/VibeCode/heycreator-ui-test--main/user-story-map/versions/v1.0.3/screenshots/influencer/dashboard/SCR-I-DASH-1.png",
+    "fileSize": 128643,
+    "capturedAt": "2026-03-05T19:24:22.174Z"
+  },
+  {
+    "id": "SCR-I-DASH-4",
+    "success": true,
+    "filePath": "/Users/marco/Desktop/VibeCode/heycreator-ui-test--main/user-story-map/versions/v1.0.3/screenshots/influencer/dashboard/SCR-I-DASH-4.png",
+    "fileSize": 128643,
+    "capturedAt": "2026-03-05T19:24:23.611Z"
+  },
+  {
+    "id": "SCR-I-MKTPL-1",
+    "success": true,
+    "filePath": "/Users/marco/Desktop/VibeCode/heycreator-ui-test--main/user-story-map/versions/v1.0.3/screenshots/influencer/marketplace/SCR-I-MKTPL-1.png",
+    "fileSize": 112842,
+    "capturedAt": "2026-03-05T19:24:25.692Z"
+  },
+  {
+    "id": "SCR-I-MKTPL-2",
+    "success": true,
+    "filePath": "/Users/marco/Desktop/VibeCode/heycreator-ui-test--main/user-story-map/versions/v1.0.3/screenshots/influencer/marketplace/SCR-I-MKTPL-2.png",
+    "fileSize": 112842,
+    "capturedAt": "2026-03-05T19:24:27.493Z"
+  },
+  {
+    "id": "SCR-I-MKTPL-3",
+    "success": true,
+    "filePath": "/Users/marco/Desktop/VibeCode/heycreator-ui-test--main/user-story-map/versions/v1.0.3/screenshots/influencer/marketplace/SCR-I-MKTPL-3.png",
+    "fileSize": 141869,
+    "capturedAt": "2026-03-05T19:24:29.618Z"
+  },
+  {
+    "id": "SCR-I-MKTPL-5",
+    "success": true,
+    "filePath": "/Users/marco/Desktop/VibeCode/heycreator-ui-test--main/user-story-map/versions/v1.0.3/screenshots/influencer/marketplace/SCR-I-MKTPL-5.png",
+    "fileSize": 104198,
+    "capturedAt": "2026-03-05T19:24:31.799Z"
+  },
+  {
+    "id": "SCR-I-MKTPL-6-MODAL",
+    "success": true,
+    "filePath": "/Users/marco/Desktop/VibeCode/heycreator-ui-test--main/user-story-map/versions/v1.0.3/screenshots/influencer/marketplace/SCR-I-MKTPL-6-MODAL.png",
+    "fileSize": 104198,
+    "capturedAt": "2026-03-05T19:24:33.477Z"
+  },
+  {
+    "id": "SCR-I-MKTPL-7-SUCCESS",
+    "success": true,
+    "filePath": "/Users/marco/Desktop/VibeCode/heycreator-ui-test--main/user-story-map/versions/v1.0.3/screenshots/influencer/marketplace/SCR-I-MKTPL-7-SUCCESS.png",
+    "fileSize": 104198,
+    "capturedAt": "2026-03-05T19:24:35.282Z"
+  },
+  {
+    "id": "SCR-I-CAMP-1",
+    "success": true,
+    "filePath": "/Users/marco/Desktop/VibeCode/heycreator-ui-test--main/user-story-map/versions/v1.0.3/screenshots/influencer/campaigns/SCR-I-CAMP-1.png",
+    "fileSize": 98121,
+    "capturedAt": "2026-03-05T19:24:51.073Z"
+  },
+  {
+    "id": "SCR-I-CAMP-2-OVERVIEW",
+    "success": true,
+    "filePath": "/Users/marco/Desktop/VibeCode/heycreator-ui-test--main/user-story-map/versions/v1.0.3/screenshots/influencer/campaigns/SCR-I-CAMP-2-OVERVIEW.png",
+    "fileSize": 113317,
+    "capturedAt": "2026-03-05T19:24:53.500Z"
+  },
+  {
+    "id": "SCR-I-CAMP-2-CONTENT",
+    "success": true,
+    "filePath": "/Users/marco/Desktop/VibeCode/heycreator-ui-test--main/user-story-map/versions/v1.0.3/screenshots/influencer/campaigns/SCR-I-CAMP-2-CONTENT.png",
+    "fileSize": 113317,
+    "capturedAt": "2026-03-05T19:24:55.206Z"
+  },
+  {
+    "id": "SCR-I-CAMP-2-BRIEF",
+    "success": true,
+    "filePath": "/Users/marco/Desktop/VibeCode/heycreator-ui-test--main/user-story-map/versions/v1.0.3/screenshots/influencer/campaigns/SCR-I-CAMP-2-BRIEF.png",
+    "fileSize": 113317,
+    "capturedAt": "2026-03-05T19:24:56.755Z"
+  },
+  {
+    "id": "SCR-I-CAMP-2-PAYMENTS",
+    "success": true,
+    "filePath": "/Users/marco/Desktop/VibeCode/heycreator-ui-test--main/user-story-map/versions/v1.0.3/screenshots/influencer/campaigns/SCR-I-CAMP-2-PAYMENTS.png",
+    "fileSize": 113317,
+    "capturedAt": "2026-03-05T19:24:58.393Z"
+  },
+  {
+    "id": "SCR-I-CAMP-2-ANALYTICS",
+    "success": true,
+    "filePath": "/Users/marco/Desktop/VibeCode/heycreator-ui-test--main/user-story-map/versions/v1.0.3/screenshots/influencer/campaigns/SCR-I-CAMP-2-ANALYTICS.png",
+    "fileSize": 113317,
+    "capturedAt": "2026-03-05T19:25:00.000Z"
+  },
+  {
+    "id": "SCR-I-CAMP-3",
+    "success": true,
+    "filePath": "/Users/marco/Desktop/VibeCode/heycreator-ui-test--main/user-story-map/versions/v1.0.3/screenshots/influencer/campaigns/SCR-I-CAMP-3.png",
+    "fileSize": 84037,
+    "capturedAt": "2026-03-05T19:25:02.254Z"
+  },
+  {
+    "id": "SCR-I-CAMP-5",
+    "success": true,
+    "filePath": "/Users/marco/Desktop/VibeCode/heycreator-ui-test--main/user-story-map/versions/v1.0.3/screenshots/influencer/campaigns/SCR-I-CAMP-5.png",
+    "fileSize": 97794,
+    "capturedAt": "2026-03-05T19:25:18.184Z"
+  },
+  {
+    "id": "SCR-I-APP-1",
+    "success": true,
+    "filePath": "/Users/marco/Desktop/VibeCode/heycreator-ui-test--main/user-story-map/versions/v1.0.3/screenshots/influencer/applications/SCR-I-APP-1.png",
+    "fileSize": 109234,
+    "capturedAt": "2026-03-05T19:25:20.191Z"
+  },
+  {
+    "id": "SCR-I-APP-2",
+    "success": true,
+    "filePath": "/Users/marco/Desktop/VibeCode/heycreator-ui-test--main/user-story-map/versions/v1.0.3/screenshots/influencer/applications/SCR-I-APP-2.png",
+    "fileSize": 109234,
+    "capturedAt": "2026-03-05T19:25:21.675Z"
+  },
+  {
+    "id": "SCR-I-APP-4",
+    "success": true,
+    "filePath": "/Users/marco/Desktop/VibeCode/heycreator-ui-test--main/user-story-map/versions/v1.0.3/screenshots/influencer/applications/SCR-I-APP-4.png",
+    "fileSize": 109234,
+    "capturedAt": "2026-03-05T19:25:23.138Z"
+  },
+  {
+    "id": "SCR-I-INV-1",
+    "success": true,
+    "filePath": "/Users/marco/Desktop/VibeCode/heycreator-ui-test--main/user-story-map/versions/v1.0.3/screenshots/influencer/invitations/SCR-I-INV-1.png",
+    "fileSize": 43180,
+    "capturedAt": "2026-03-05T19:25:24.931Z"
+  },
+  {
+    "id": "SCR-I-INV-2",
+    "success": true,
+    "filePath": "/Users/marco/Desktop/VibeCode/heycreator-ui-test--main/user-story-map/versions/v1.0.3/screenshots/influencer/invitations/SCR-I-INV-2.png",
+    "fileSize": 43180,
+    "capturedAt": "2026-03-05T19:25:26.452Z"
+  },
+  {
+    "id": "SCR-I-PROF-1",
+    "success": true,
+    "filePath": "/Users/marco/Desktop/VibeCode/heycreator-ui-test--main/user-story-map/versions/v1.0.3/screenshots/influencer/profile/SCR-I-PROF-1.png",
+    "fileSize": 74633,
+    "capturedAt": "2026-03-05T19:25:28.527Z"
+  },
+  {
+    "id": "SCR-I-PROF-2",
+    "success": true,
+    "filePath": "/Users/marco/Desktop/VibeCode/heycreator-ui-test--main/user-story-map/versions/v1.0.3/screenshots/influencer/profile/SCR-I-PROF-2.png",
+    "fileSize": 74633,
+    "capturedAt": "2026-03-05T19:25:30.106Z"
+  },
+  {
+    "id": "SCR-I-NOTIF-1",
+    "success": true,
+    "filePath": "/Users/marco/Desktop/VibeCode/heycreator-ui-test--main/user-story-map/versions/v1.0.3/screenshots/influencer/notifications/SCR-I-NOTIF-1.png",
+    "fileSize": 80198,
+    "capturedAt": "2026-03-05T19:25:31.984Z"
+  },
+  {
+    "id": "SCR-I-NOTIF-2",
+    "success": true,
+    "filePath": "/Users/marco/Desktop/VibeCode/heycreator-ui-test--main/user-story-map/versions/v1.0.3/screenshots/influencer/notifications/SCR-I-NOTIF-2.png",
+    "fileSize": 80198,
+    "capturedAt": "2026-03-05T19:25:33.500Z"
+  },
+  {
+    "id": "SCR-I-CAL-1",
+    "success": true,
+    "filePath": "/Users/marco/Desktop/VibeCode/heycreator-ui-test--main/user-story-map/versions/v1.0.3/screenshots/influencer/calendar/SCR-I-CAL-1.png",
+    "fileSize": 71605,
+    "capturedAt": "2026-03-05T19:25:35.295Z"
+  },
+  {
+    "id": "SCR-I-CONT-1",
+    "success": true,
+    "filePath": "/Users/marco/Desktop/VibeCode/heycreator-ui-test--main/user-story-map/versions/v1.0.3/screenshots/influencer/campaigns/SCR-I-CONT-1.png",
+    "fileSize": 84037,
+    "capturedAt": "2026-03-05T19:25:36.862Z"
+  }
+]

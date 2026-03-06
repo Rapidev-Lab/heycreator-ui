@@ -1,0 +1,152 @@
+# Settings for Backend (on Cloud Run).
+# See https://firebase.google.com/docs/app-hosting/configure#cloud-run
+runConfig:
+  cpu: 2
+  memoryMiB: 1024
+
+# Environment variables and secrets.
+env:
+  # API Keys - Stored as secrets in Cloud Secret Manager
+  # To set up secrets, run:
+  # echo -n "your_api_key" | gcloud secrets create RAPIDAPI_KEY --data-file=-
+  - variable: RAPIDAPI_KEY
+    secret: RAPIDAPI_KEY
+    availability:
+      - RUNTIME
+
+  - variable: RAPIDAPI_KEY_2
+    secret: RAPIDAPI_KEY_2
+    availability:
+      - RUNTIME
+
+  - variable: APIFY_API_TOKEN
+    secret: APIFY_API_TOKEN
+    availability:
+      - RUNTIME
+
+  - variable: FIREBASE_SERVICE_ACCOUNT_BASE64
+    secret: FIREBASE_SERVICE_ACCOUNT_BASE64
+    availability:
+      - RUNTIME
+
+  - variable: INSTAGRAM_APP_SECRET
+    secret: INSTAGRAM_APP_SECRET
+    availability:
+      - RUNTIME
+
+  # API Host Configurations
+  - variable: INSTAGRAM_API_HOST
+    value: instagram120.p.rapidapi.com
+    availability:
+      - BUILD
+      - RUNTIME
+
+  - variable: INSTAGRAM_SEARCH_API_HOST
+    value: instagram-premium-api-2023.p.rapidapi.com
+    availability:
+      - BUILD
+      - RUNTIME
+
+  - variable: FACEBOOK_API_HOST
+    value: facebook-scraper3.p.rapidapi.com
+    availability:
+      - BUILD
+      - RUNTIME
+
+  - variable: YOUTUBE_API_HOST
+    value: youtube138.p.rapidapi.com
+    availability:
+      - BUILD
+      - RUNTIME
+
+  - variable: TIKTOK_API_HOST
+    value: tiktok-api6.p.rapidapi.com
+    availability:
+      - BUILD
+      - RUNTIME
+
+  - variable: TIKTOK_SEARCH_API_HOST
+    value: tiktok-scraper7.p.rapidapi.com
+    availability:
+      - BUILD
+      - RUNTIME
+
+  - variable: TWITTER_API_HOST
+    value: twitter241.p.rapidapi.com
+    availability:
+      - BUILD
+      - RUNTIME
+
+  - variable: TWITTER_SEARCH_API_HOST
+    value: twitter-api45.p.rapidapi.com
+    availability:
+      - BUILD
+      - RUNTIME
+
+  # Firebase Client Configuration (Public)
+  - variable: NEXT_PUBLIC_FIREBASE_API_KEY
+    value: AIzaSyDE9JLuaQyoOYrHBNuzm1rEaeTZqm7HO4s
+    availability:
+      - BUILD
+      - RUNTIME
+
+  - variable: NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN
+    value: heycreator-c0b3e.firebaseapp.com
+    availability:
+      - BUILD
+      - RUNTIME
+
+  - variable: NEXT_PUBLIC_FIREBASE_PROJECT_ID
+    value: heycreator-c0b3e
+    availability:
+      - BUILD
+      - RUNTIME
+
+  - variable: NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET
+    value: heycreator-c0b3e.firebasestorage.app
+    availability:
+      - BUILD
+      - RUNTIME
+
+  - variable: NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID
+    value: "411435802750"
+    availability:
+      - BUILD
+      - RUNTIME
+
+  - variable: NEXT_PUBLIC_FIREBASE_APP_ID
+    value: 1:411435802750:web:43b46472ed061cc034f82f
+    availability:
+      - BUILD
+      - RUNTIME
+
+  # Instagram Business Login Configuration
+  - variable: INSTAGRAM_APP_ID
+    value: "1164283962537233"
+    availability:
+      - BUILD
+      - RUNTIME
+
+  - variable: NEXT_PUBLIC_INSTAGRAM_APP_ID
+    value: "1164283962537233"
+    availability:
+      - BUILD
+      - RUNTIME
+
+  - variable: NEXT_PUBLIC_INSTAGRAM_APP_SECRET
+    value: e25d61945714dd8b303f54139f9e4b68
+    availability:
+      - BUILD
+      - RUNTIME
+
+  - variable: NEXT_PUBLIC_INSTAGRAM_REDIRECT_URI
+    value: https://heycreator.vercel.app/auth/instagram/callback
+    availability:
+      - BUILD
+      - RUNTIME
+
+  - variable: INSTAGRAM_REDIRECT_URI
+    value: https://heycreator.vercel.app/auth/instagram/callback
+    availability:
+      - BUILD
+      - RUNTIME

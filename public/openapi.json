@@ -1,0 +1,1656 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "HeyCreator API",
+    "description": "Influencer discovery and campaign management platform API. Connects brands with creators across Instagram, TikTok, YouTube, Twitter, and Facebook.",
+    "version": "1.0.0",
+    "contact": {
+      "name": "HeyCreator Team"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": "Development"
+    }
+  ],
+  "tags": [
+    { "name": "Authentication", "description": "Email verification, password reset, OAuth, and role detection" },
+    { "name": "Search & Discovery", "description": "Hybrid search across Firestore database and live social media APIs" },
+    { "name": "Profiles", "description": "Unified influencer profile management (create, read, update, delete)" },
+    { "name": "Campaigns", "description": "Brand campaign lifecycle management" },
+    { "name": "Campaign Applications", "description": "Creator applications to campaigns" },
+    { "name": "Campaign Invitations", "description": "Brand-initiated campaign invitations to creators" },
+    { "name": "Campaign Documents", "description": "Campaign assets, briefs, and contracts" },
+    { "name": "Deliverables", "description": "Content deliverable submission and tracking" },
+    { "name": "Creator Lists", "description": "Brand-managed creator lists and collections" },
+    { "name": "Users & Creators", "description": "User data, global creator discovery, and export" },
+    { "name": "Enrichment", "description": "Profile enrichment via external APIs" },
+    { "name": "Utility", "description": "Image proxy, metrics, pricing, and dashboard helpers" }
+  ],
+  "security": [
+    { "BearerAuth": [] }
+  ],
+  "paths": {
+    "/api/auth/check-email-status": {
+      "post": {
+        "tags": ["Authentication"],
+        "summary": "Check email existence and verification status",
+        "description": "Checks if an email address exists in Firebase Auth and whether it has been verified. Used during login to detect unverified accounts.",
+        "security": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["email"],
+                "properties": {
+                  "email": { "type": "string", "format": "email", "example": "user@example.com" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Email status retrieved",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean", "example": true },
+                    "exists": { "type": "boolean", "description": "Whether email exists in Firebase Auth" },
+                    "emailVerified": { "type": "boolean", "description": "Verification status (only if exists=true)" },
+                    "uid": { "type": "string", "description": "Firebase UID (only if exists=true)" }
+                  }
+                }
+              }
+            }
+          },
+          "400": { "$ref": "#/components/responses/BadRequest" },
+          "500": { "$ref": "#/components/responses/ServerError" }
+        }
+      }
+    },
+    "/api/auth/check-email-verified": {
+      "post": {
+        "tags": ["Authentication"],
+        "summary": "Check email verification status by UID",
+        "security": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["uid"],
+                "properties": {
+                  "uid": { "type": "string", "description": "Firebase UID" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Verification status",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean" },
+                    "emailVerified": { "type": "boolean" }
+                  }
+                }
+              }
+            }
+          },
+          "400": { "$ref": "#/components/responses/BadRequest" },
+          "500": { "$ref": "#/components/responses/ServerError" }
+        }
+      }
+    },
+    "/api/auth/get-user-role-by-email": {
+      "post": {
+        "tags": ["Authentication"],
+        "summary": "Get user role by email",
+        "description": "Fetches user role (influencer or brand) from Firestore by email. Used for role-aware password reset redirects.",
+        "security": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["email"],
+                "properties": {
+                  "email": { "type": "string", "format": "email" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User role found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean" },
+                    "role": { "$ref": "#/components/schemas/UserRole" }
+                  }
+                }
+              }
+            }
+          },
+          "404": { "description": "User not found" },
+          "500": { "$ref": "#/components/responses/ServerError" }
+        }
+      }
+    },
+    "/api/auth/resend-verification": {
+      "post": {
+        "tags": ["Authentication"],
+        "summary": "Resend email verification",
+        "description": "Resends the email verification link to the user. Requires the user's Firebase UID.",
+        "security": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["uid"],
+                "properties": {
+                  "uid": { "type": "string", "description": "Firebase UID of the user" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Verification email sent",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SuccessResponse" }
+              }
+            }
+          },
+          "400": { "$ref": "#/components/responses/BadRequest" },
+          "500": { "$ref": "#/components/responses/ServerError" }
+        }
+      }
+    },
+    "/api/auth/update-email": {
+      "post": {
+        "tags": ["Authentication"],
+        "summary": "Update user email",
+        "description": "Updates the email address for a user (primarily for Instagram OAuth users who need to set an email).",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["uid", "email"],
+                "properties": {
+                  "uid": { "type": "string" },
+                  "email": { "type": "string", "format": "email" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Email updated", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/SuccessResponse" } } } },
+          "400": { "$ref": "#/components/responses/BadRequest" },
+          "500": { "$ref": "#/components/responses/ServerError" }
+        }
+      }
+    },
+    "/api/auth/instagram/callback": {
+      "post": {
+        "tags": ["Authentication"],
+        "summary": "Instagram OAuth callback",
+        "description": "Handles Instagram OAuth callback. Exchanges authorization code for access token, creates or updates user in Firebase, and returns a custom token.",
+        "security": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["code"],
+                "properties": {
+                  "code": { "type": "string", "description": "Instagram authorization code from OAuth redirect" },
+                  "role": { "$ref": "#/components/schemas/UserRole" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OAuth successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean" },
+                    "customToken": { "type": "string", "description": "Firebase custom token for client-side sign-in" },
+                    "instagramData": { "$ref": "#/components/schemas/InstagramBusinessAccount" },
+                    "isNewUser": { "type": "boolean" }
+                  }
+                }
+              }
+            }
+          },
+          "400": { "$ref": "#/components/responses/BadRequest" },
+          "500": { "$ref": "#/components/responses/ServerError" }
+        }
+      }
+    },
+    "/api/auth/instagram/refresh-token": {
+      "post": {
+        "tags": ["Authentication"],
+        "summary": "Refresh Instagram long-lived token",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["uid"],
+                "properties": {
+                  "uid": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Token refreshed", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/SuccessResponse" } } } },
+          "500": { "$ref": "#/components/responses/ServerError" }
+        }
+      },
+      "get": {
+        "tags": ["Authentication"],
+        "summary": "Check if Instagram token needs refresh",
+        "parameters": [
+          { "name": "uid", "in": "query", "required": true, "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "Token status",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean" },
+                    "needsRefresh": { "type": "boolean" },
+                    "expiresAt": { "type": "string", "format": "date-time" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/search": {
+      "post": {
+        "tags": ["Search & Discovery"],
+        "summary": "Production hybrid search",
+        "description": "Searches for influencers using a hybrid strategy: first queries the Firestore database for fast cached results, then falls back to live social media APIs (Instagram, TikTok, YouTube, Twitter, Facebook) if results are insufficient. Includes relevance scoring, quality filtering, and deduplication.",
+        "security": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["query"],
+                "properties": {
+                  "query": { "type": "string", "description": "Search term (name, username, or keyword)", "example": "fashion blogger" },
+                  "platforms": {
+                    "type": "array",
+                    "items": { "$ref": "#/components/schemas/Platform" },
+                    "description": "Platforms to search (defaults to all 5)"
+                  },
+                  "exact": { "type": "boolean", "description": "Exact username match only", "default": false },
+                  "limit": { "type": "integer", "description": "Max results", "default": 50 },
+                  "liveSearch": { "type": "boolean", "description": "Force live API calls (skip database cache)", "default": false }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Search results",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean" },
+                    "data": {
+                      "type": "array",
+                      "items": { "$ref": "#/components/schemas/SearchResultProfile" }
+                    },
+                    "metadata": {
+                      "type": "object",
+                      "properties": {
+                        "query": { "type": "string" },
+                        "totalResults": { "type": "integer" },
+                        "searchTime": { "type": "number", "description": "Time in milliseconds" },
+                        "source": { "type": "string", "enum": ["cache", "live"] },
+                        "cacheHits": { "type": "array", "items": { "type": "string" } },
+                        "cacheMisses": { "type": "array", "items": { "type": "string" } },
+                        "resultsByPlatform": { "type": "object", "additionalProperties": { "type": "integer" } },
+                        "qualityFiltered": { "type": "integer" },
+                        "duplicatesRemoved": { "type": "integer" }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": { "$ref": "#/components/responses/BadRequest" },
+          "500": { "$ref": "#/components/responses/ServerError" }
+        }
+      }
+    },
+    "/api/discover/search": {
+      "post": {
+        "tags": ["Search & Discovery"],
+        "summary": "Advanced discovery search with filters",
+        "description": "Advanced search with 15+ filters including platform, location, followers range, engagement rate, categories, and more. Supports pagination.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "query": { "type": "string" },
+                  "platforms": { "type": "array", "items": { "$ref": "#/components/schemas/Platform" } },
+                  "location": { "type": "string" },
+                  "minFollowers": { "type": "integer" },
+                  "maxFollowers": { "type": "integer" },
+                  "minEngagement": { "type": "number" },
+                  "categories": { "type": "array", "items": { "type": "string" } },
+                  "vettedOnly": { "type": "boolean" },
+                  "liveSearch": { "type": "boolean" },
+                  "page": { "type": "integer", "default": 1 },
+                  "limit": { "type": "integer", "default": 20 }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Discovery results",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean" },
+                    "data": { "type": "array", "items": { "$ref": "#/components/schemas/SearchResultProfile" } },
+                    "pagination": {
+                      "type": "object",
+                      "properties": {
+                        "page": { "type": "integer" },
+                        "limit": { "type": "integer" },
+                        "total": { "type": "integer" },
+                        "hasMore": { "type": "boolean" }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/profiles": {
+      "post": {
+        "tags": ["Profiles"],
+        "summary": "Create unified profile",
+        "description": "Creates a new unified influencer profile from search results. Saves to Firestore with linked social accounts, combined metrics, and influence score. Uses `primaryAccountKey` (platform:username) for deduplication.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["selectedProfiles"],
+                "properties": {
+                  "selectedProfiles": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "platform": { "$ref": "#/components/schemas/Platform" },
+                        "username": { "type": "string" },
+                        "followerCount": { "type": "integer" },
+                        "verified": { "type": "boolean" },
+                        "profileUrl": { "type": "string" }
+                      }
+                    }
+                  },
+                  "displayName": { "type": "string" },
+                  "bio": { "type": "string" },
+                  "location": { "type": "string" },
+                  "categories": { "type": "array", "items": { "type": "string" } },
+                  "avatarUrl": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Profile created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean" },
+                    "data": { "$ref": "#/components/schemas/UnifiedProfile" }
+                  }
+                }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "500": { "$ref": "#/components/responses/ServerError" }
+        }
+      },
+      "get": {
+        "tags": ["Profiles"],
+        "summary": "List user profiles",
+        "description": "Fetches all unified profiles for the authenticated user from Firestore.",
+        "parameters": [
+          { "name": "status", "in": "query", "schema": { "type": "string", "enum": ["active", "archived", "deleted"], "default": "active" } },
+          { "name": "sortBy", "in": "query", "schema": { "type": "string", "default": "updatedAt" } },
+          { "name": "sortOrder", "in": "query", "schema": { "type": "string", "enum": ["asc", "desc"], "default": "desc" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "Profiles list",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean" },
+                    "data": { "type": "array", "items": { "$ref": "#/components/schemas/UnifiedProfile" } },
+                    "count": { "type": "integer" }
+                  }
+                }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" }
+        }
+      }
+    },
+    "/api/profiles/{id}": {
+      "get": {
+        "tags": ["Profiles"],
+        "summary": "Get profile details",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "Profile with full details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean" },
+                    "data": { "$ref": "#/components/schemas/UnifiedProfile" }
+                  }
+                }
+              }
+            }
+          },
+          "404": { "description": "Profile not found" }
+        }
+      },
+      "put": {
+        "tags": ["Profiles"],
+        "summary": "Update profile",
+        "description": "Update a unified profile. Supports adding/removing linked accounts and updating profile details.",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "addAccounts": { "type": "array", "items": { "type": "object" } },
+                  "removeAccounts": { "type": "array", "items": { "type": "string" } },
+                  "updateDetails": { "type": "object" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Profile updated", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/SuccessResponse" } } } },
+          "404": { "description": "Profile not found" }
+        }
+      },
+      "delete": {
+        "tags": ["Profiles"],
+        "summary": "Soft-delete profile",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": { "description": "Profile deleted", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/SuccessResponse" } } } },
+          "404": { "description": "Profile not found" }
+        }
+      }
+    },
+    "/api/influencer/profiles": {
+      "get": {
+        "tags": ["Profiles"],
+        "summary": "List influencer profiles",
+        "description": "Fetches all influencer profiles for the authenticated user. Supports filtering by status.",
+        "parameters": [
+          { "name": "status", "in": "query", "schema": { "type": "string", "enum": ["active", "archived", "deleted"] } },
+          { "name": "limit", "in": "query", "schema": { "type": "integer" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "Influencer profiles",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean" },
+                    "data": { "type": "array", "items": { "$ref": "#/components/schemas/UnifiedProfile" } },
+                    "count": { "type": "integer" }
+                  }
+                }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" }
+        }
+      }
+    },
+    "/api/campaigns": {
+      "post": {
+        "tags": ["Campaigns"],
+        "summary": "Create campaign",
+        "description": "Creates a new campaign. Requires brand role. Supports draft mode (partial data) and full creation with validation.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/CampaignInput" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Campaign created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean" },
+                    "data": { "$ref": "#/components/schemas/Campaign" }
+                  }
+                }
+              }
+            }
+          },
+          "400": { "$ref": "#/components/responses/BadRequest" },
+          "403": { "$ref": "#/components/responses/Forbidden" }
+        }
+      },
+      "get": {
+        "tags": ["Campaigns"],
+        "summary": "List campaigns",
+        "description": "Fetches campaigns based on user role. Brands see their own campaigns; creators see published campaigns they can apply to.",
+        "responses": {
+          "200": {
+            "description": "Campaigns list",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean" },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "campaigns": { "type": "array", "items": { "$ref": "#/components/schemas/Campaign" } }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/campaigns/{id}": {
+      "get": {
+        "tags": ["Campaigns"],
+        "summary": "Get campaign with applications",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "Campaign details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean" },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "campaign": { "$ref": "#/components/schemas/Campaign" },
+                        "applications": { "type": "array", "items": { "$ref": "#/components/schemas/Application" } }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": { "description": "Campaign not found" }
+        }
+      },
+      "patch": {
+        "tags": ["Campaigns"],
+        "summary": "Update campaign",
+        "description": "Partially updates a campaign. Brand must own the campaign.",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/CampaignInput" }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Campaign updated", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/SuccessResponse" } } } },
+          "403": { "$ref": "#/components/responses/Forbidden" },
+          "404": { "description": "Campaign not found" }
+        }
+      },
+      "delete": {
+        "tags": ["Campaigns"],
+        "summary": "Delete campaign",
+        "description": "Deletes a campaign. Brand must own the campaign.",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": { "description": "Campaign deleted", "content": { "application/json": { "schema": { "type": "object", "properties": { "success": { "type": "boolean" }, "message": { "type": "string" } } } } } },
+          "403": { "$ref": "#/components/responses/Forbidden" },
+          "404": { "description": "Campaign not found" }
+        }
+      }
+    },
+    "/api/campaigns/{id}/publish": {
+      "post": {
+        "tags": ["Campaigns"],
+        "summary": "Publish campaign",
+        "description": "Publishes a draft campaign, making it visible to creators. Validates all required fields before publishing.",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": { "description": "Campaign published", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/SuccessResponse" } } } },
+          "400": { "description": "Validation failed — missing required fields" },
+          "403": { "$ref": "#/components/responses/Forbidden" }
+        }
+      }
+    },
+    "/api/applications": {
+      "get": {
+        "tags": ["Campaign Applications"],
+        "summary": "List applications",
+        "description": "Fetches applications with role-based filtering. Brands see applications to their campaigns; creators see their own applications.",
+        "parameters": [
+          { "name": "status", "in": "query", "schema": { "type": "string", "description": "Comma-separated statuses: pending,under_review,accepted,rejected,withdrawn" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "Applications list",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean" },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "applications": { "type": "array", "items": { "$ref": "#/components/schemas/Application" } },
+                        "count": { "type": "integer" },
+                        "stats": {
+                          "type": "object",
+                          "properties": {
+                            "total": { "type": "integer" },
+                            "pending": { "type": "integer" },
+                            "underReview": { "type": "integer" },
+                            "accepted": { "type": "integer" },
+                            "rejected": { "type": "integer" }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/campaigns/{id}/applications": {
+      "get": {
+        "tags": ["Campaign Applications"],
+        "summary": "Get campaign applications",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": { "description": "Campaign applications", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/SuccessResponse" } } } }
+        }
+      },
+      "post": {
+        "tags": ["Campaign Applications"],
+        "summary": "Apply to campaign",
+        "description": "Submit an application to a published campaign. Requires creator role.",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "coverLetter": { "type": "string" },
+                  "proposedRate": { "type": "number" },
+                  "portfolio": { "type": "array", "items": { "type": "string" } }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Application submitted" },
+          "400": { "$ref": "#/components/responses/BadRequest" },
+          "409": { "description": "Already applied to this campaign" }
+        }
+      }
+    },
+    "/api/campaigns/{id}/invitations": {
+      "post": {
+        "tags": ["Campaign Invitations"],
+        "summary": "Send campaign invitation",
+        "description": "Invites a creator to a campaign. Requires brand role.",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "creatorId": { "type": "string" },
+                  "message": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Invitation sent" },
+          "409": { "description": "Already invited" }
+        }
+      },
+      "get": {
+        "tags": ["Campaign Invitations"],
+        "summary": "Get campaign invitations",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": { "description": "Invitations list", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/SuccessResponse" } } } }
+        }
+      }
+    },
+    "/api/campaigns/{id}/documents": {
+      "get": {
+        "tags": ["Campaign Documents"],
+        "summary": "Get campaign documents",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": { "description": "Campaign documents", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/SuccessResponse" } } } }
+        }
+      },
+      "post": {
+        "tags": ["Campaign Documents"],
+        "summary": "Upload campaign document",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": { "type": "string" },
+                  "type": { "type": "string", "enum": ["brief", "contract", "asset", "moodboard"] },
+                  "url": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Document uploaded" }
+        }
+      }
+    },
+    "/api/deliverables": {
+      "get": {
+        "tags": ["Deliverables"],
+        "summary": "List deliverables",
+        "description": "Fetches deliverables filtered by campaign or application. At least one filter is required.",
+        "parameters": [
+          { "name": "campaignId", "in": "query", "schema": { "type": "string" } },
+          { "name": "applicationId", "in": "query", "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "Deliverables list",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean" },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "deliverables": { "type": "array", "items": { "$ref": "#/components/schemas/Deliverable" } },
+                        "count": { "type": "integer" }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": { "description": "Missing campaignId or applicationId" }
+        }
+      },
+      "post": {
+        "tags": ["Deliverables"],
+        "summary": "Submit deliverable",
+        "description": "Submits a content deliverable for a campaign application. Requires creator role.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["applicationId", "deliverableType", "platform", "contentUrl"],
+                "properties": {
+                  "applicationId": { "type": "string" },
+                  "deliverableType": { "type": "string" },
+                  "platform": { "$ref": "#/components/schemas/Platform" },
+                  "contentUrl": { "type": "string", "format": "uri", "description": "Must start with http" },
+                  "contentScreenshots": { "type": "array", "items": { "type": "string" } },
+                  "caption": { "type": "string" },
+                  "hashtags": { "type": "array", "items": { "type": "string" } }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Deliverable submitted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean" },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "deliverableId": { "type": "string" },
+                        "message": { "type": "string" }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": { "$ref": "#/components/responses/BadRequest" },
+          "403": { "$ref": "#/components/responses/Forbidden" }
+        }
+      }
+    },
+    "/api/brands/lists": {
+      "get": {
+        "tags": ["Creator Lists"],
+        "summary": "List creator lists",
+        "description": "Fetches all creator lists for the authenticated brand.",
+        "responses": {
+          "200": {
+            "description": "Creator lists",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean" },
+                    "data": { "type": "array", "items": { "$ref": "#/components/schemas/CreatorList" } },
+                    "count": { "type": "integer" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Creator Lists"],
+        "summary": "Create creator list",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["name"],
+                "properties": {
+                  "name": { "type": "string" },
+                  "description": { "type": "string" },
+                  "color": { "type": "string" },
+                  "tags": { "type": "array", "items": { "type": "string" } },
+                  "mentions": { "type": "array", "items": { "type": "string" } },
+                  "locations": { "type": "array", "items": { "type": "string" } },
+                  "influenceSize": { "type": "string" },
+                  "visibility": { "type": "string", "enum": ["public", "private"] }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "List created", "content": { "application/json": { "schema": { "type": "object", "properties": { "success": { "type": "boolean" }, "data": { "$ref": "#/components/schemas/CreatorList" } } } } } },
+          "400": { "$ref": "#/components/responses/BadRequest" }
+        }
+      }
+    },
+    "/api/brands/lists/{id}": {
+      "get": {
+        "tags": ["Creator Lists"],
+        "summary": "Get list details",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": { "description": "List details", "content": { "application/json": { "schema": { "type": "object", "properties": { "success": { "type": "boolean" }, "data": { "$ref": "#/components/schemas/CreatorList" } } } } } },
+          "404": { "description": "List not found" }
+        }
+      },
+      "patch": {
+        "tags": ["Creator Lists"],
+        "summary": "Update list",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": { "type": "string" },
+                  "description": { "type": "string" },
+                  "color": { "type": "string" },
+                  "tags": { "type": "array", "items": { "type": "string" } },
+                  "visibility": { "type": "string", "enum": ["public", "private"] }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "List updated" },
+          "403": { "$ref": "#/components/responses/Forbidden" },
+          "404": { "description": "List not found" }
+        }
+      },
+      "delete": {
+        "tags": ["Creator Lists"],
+        "summary": "Delete list",
+        "description": "Deletes a creator list and removes all creator references.",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": { "description": "List deleted" },
+          "403": { "$ref": "#/components/responses/Forbidden" },
+          "404": { "description": "List not found" }
+        }
+      }
+    },
+    "/api/influencers/invitations": {
+      "get": {
+        "tags": ["Campaign Invitations"],
+        "summary": "List creator invitations",
+        "description": "Fetches all campaign invitations for the authenticated creator.",
+        "responses": {
+          "200": {
+            "description": "Invitations list",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean" },
+                    "data": { "type": "array", "items": { "$ref": "#/components/schemas/Invitation" } }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/influencers/invitations/{id}": {
+      "get": {
+        "tags": ["Campaign Invitations"],
+        "summary": "Get invitation details",
+        "description": "Fetches a single invitation with campaign details. Supports accept/reject actions.",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": { "description": "Invitation details" },
+          "404": { "description": "Invitation not found" }
+        }
+      }
+    },
+    "/api/users/{id}": {
+      "get": {
+        "tags": ["Users & Creators"],
+        "summary": "Get user data",
+        "description": "Fetches user profile data including Instagram token information.",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "User data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean" },
+                    "data": { "$ref": "#/components/schemas/User" }
+                  }
+                }
+              }
+            }
+          },
+          "404": { "description": "User not found" }
+        }
+      }
+    },
+    "/api/brands/creators/global": {
+      "get": {
+        "tags": ["Users & Creators"],
+        "summary": "Global creator discovery",
+        "description": "Fetches creators from the global influencers collection for brand discovery.",
+        "parameters": [
+          { "name": "page", "in": "query", "schema": { "type": "integer", "default": 1 } },
+          { "name": "limit", "in": "query", "schema": { "type": "integer", "default": 20 } },
+          { "name": "platform", "in": "query", "schema": { "$ref": "#/components/schemas/Platform" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "Global creators",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean" },
+                    "data": { "type": "array", "items": { "$ref": "#/components/schemas/SearchResultProfile" } }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/brands/creators/export": {
+      "post": {
+        "tags": ["Users & Creators"],
+        "summary": "Export creators",
+        "description": "Exports a list of creators to CSV or JSON format.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "creatorIds": { "type": "array", "items": { "type": "string" } },
+                  "format": { "type": "string", "enum": ["csv", "json"], "default": "csv" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Export data returned" }
+        }
+      }
+    },
+    "/api/enrich/instagram": {
+      "post": {
+        "tags": ["Enrichment"],
+        "summary": "Instagram profile enrichment",
+        "description": "Runs 8 concurrent enrichment methods (7 API + 1 extraction) to gather comprehensive Instagram profile data. Optionally saves results to Firebase Storage and updates the Firestore profile.",
+        "security": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["username"],
+                "properties": {
+                  "username": { "type": "string", "description": "Instagram username (without @)", "example": "natgeo" },
+                  "cachedProfileData": { "type": "object", "description": "Cached search result to skip redundant calls" },
+                  "profileId": { "type": "string", "description": "Firestore unified_profiles doc ID (enables auto-save)" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Enrichment results",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean" },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "profile": { "type": "object", "description": "Merged profile data from all methods" },
+                        "dataCompleteness": {
+                          "type": "object",
+                          "properties": {
+                            "percentComplete": { "type": "number" },
+                            "fieldsPopulated": { "type": "integer" },
+                            "totalFields": { "type": "integer" }
+                          }
+                        },
+                        "sourcesUsed": { "type": "array", "items": { "type": "string" } },
+                        "fetchTime": { "type": "number", "description": "Time in milliseconds" },
+                        "errors": { "type": "array", "items": { "type": "string" } }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": { "$ref": "#/components/responses/BadRequest" },
+          "500": { "$ref": "#/components/responses/ServerError" }
+        }
+      }
+    },
+    "/api/image-proxy": {
+      "get": {
+        "tags": ["Utility"],
+        "summary": "Proxy external images",
+        "description": "Server-side image proxy to bypass CORS restrictions for social media profile pictures. Supports retry logic, forced IPv4, and CDN fallback via weserv.nl.",
+        "security": [],
+        "parameters": [
+          { "name": "url", "in": "query", "required": true, "schema": { "type": "string" }, "description": "Base64-encoded image URL" }
+        ],
+        "responses": {
+          "200": {
+            "description": "Image data",
+            "content": {
+              "image/*": {
+                "schema": { "type": "string", "format": "binary" }
+              }
+            }
+          },
+          "400": { "description": "Missing or invalid URL" },
+          "500": { "description": "Failed to fetch image" }
+        }
+      }
+    },
+    "/api/dashboard/recommended": {
+      "get": {
+        "tags": ["Utility"],
+        "summary": "Recommended creators for dashboard",
+        "description": "Returns recommended creators for the brand dashboard based on activity and preferences.",
+        "responses": {
+          "200": {
+            "description": "Recommended creators",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean" },
+                    "data": { "type": "array", "items": { "$ref": "#/components/schemas/SearchResultProfile" } }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/metrics": {
+      "get": {
+        "tags": ["Utility"],
+        "summary": "Platform metrics",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Platform metrics data",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SuccessResponse" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/pricing": {
+      "get": {
+        "tags": ["Utility"],
+        "summary": "Pricing calculator",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Pricing data",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SuccessResponse" }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "Firebase ID Token",
+        "description": "Firebase Authentication ID token. Obtain by calling `firebase.auth().currentUser.getIdToken()`."
+      },
+      "UserIdHeader": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "x-user-id",
+        "description": "Development fallback: Firebase UID passed directly as header. Not for production use."
+      }
+    },
+    "schemas": {
+      "Platform": {
+        "type": "string",
+        "enum": ["instagram", "tiktok", "youtube", "twitter", "facebook"]
+      },
+      "UserRole": {
+        "type": "string",
+        "enum": ["influencer", "brand"]
+      },
+      "AuthProvider": {
+        "type": "string",
+        "enum": ["email", "google", "facebook", "apple", "phone", "instagram"]
+      },
+      "CampaignStatus": {
+        "type": "string",
+        "enum": ["DRAFT", "PUBLISHED", "ACTIVE", "IN_PROGRESS", "COMPLETED", "CANCELLED"]
+      },
+      "ApplicationStatus": {
+        "type": "string",
+        "enum": ["PENDING", "UNDER_REVIEW", "ACCEPTED", "REJECTED", "WITHDRAWN"]
+      },
+      "DeliverableStatus": {
+        "type": "string",
+        "enum": ["SUBMITTED", "APPROVED", "REJECTED", "REVISED"]
+      },
+      "SearchResultProfile": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "platform": { "$ref": "#/components/schemas/Platform" },
+          "username": { "type": "string", "example": "natgeo" },
+          "display_name": { "type": "string", "example": "National Geographic" },
+          "follower_count": { "type": "integer", "example": 283000000 },
+          "following_count": { "type": "integer" },
+          "profile_url": { "type": "string", "format": "uri" },
+          "avatar_url": { "type": "string", "format": "uri" },
+          "bio": { "type": "string" },
+          "contact_email": { "type": "string" },
+          "verified": { "type": "boolean" }
+        }
+      },
+      "UnifiedProfile": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string", "description": "Firestore document ID" },
+          "userId": { "type": "string" },
+          "primaryAccountKey": { "type": "string", "description": "platform:username dedup key" },
+          "displayName": { "type": "string" },
+          "bio": { "type": "string" },
+          "location": { "type": "string" },
+          "categories": { "type": "array", "items": { "type": "string" } },
+          "avatarUrl": { "type": "string" },
+          "linkedAccounts": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "platform": { "$ref": "#/components/schemas/Platform" },
+                "username": { "type": "string" },
+                "followerCount": { "type": "integer" },
+                "verified": { "type": "boolean" },
+                "profileUrl": { "type": "string" }
+              }
+            }
+          },
+          "combinedMetrics": {
+            "type": "object",
+            "properties": {
+              "totalFollowers": { "type": "integer" },
+              "averageEngagementRate": { "type": "number" },
+              "totalReach": { "type": "integer" }
+            }
+          },
+          "influenceScore": { "type": "number" },
+          "estimatedPrice": { "type": "string" },
+          "createdAt": { "type": "string", "format": "date-time" },
+          "updatedAt": { "type": "string", "format": "date-time" },
+          "isActive": { "type": "boolean" }
+        }
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "uid": { "type": "string" },
+          "email": { "type": "string", "format": "email" },
+          "role": { "$ref": "#/components/schemas/UserRole" },
+          "displayName": { "type": "string" },
+          "photoURL": { "type": "string" },
+          "phoneNumber": { "type": "string" },
+          "emailVerified": { "type": "boolean" },
+          "authProviders": { "type": "array", "items": { "$ref": "#/components/schemas/AuthProvider" } },
+          "profileCompleted": { "type": "number", "description": "Percentage 0-100" },
+          "isActive": { "type": "boolean" },
+          "createdAt": { "type": "string", "format": "date-time" },
+          "lastLoginAt": { "type": "string", "format": "date-time" }
+        }
+      },
+      "Campaign": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "brandId": { "type": "string" },
+          "status": { "$ref": "#/components/schemas/CampaignStatus" },
+          "campaignTitle": { "type": "string" },
+          "description": { "type": "string" },
+          "campaignObjectives": { "type": "array", "items": { "type": "string" } },
+          "kpi": { "type": "string" },
+          "campaignVisibility": { "type": "string", "enum": ["public", "private"] },
+          "campaignStart": { "type": "string", "format": "date-time" },
+          "campaignEnd": { "type": "string", "format": "date-time" },
+          "campaignProduct": {
+            "type": "object",
+            "properties": {
+              "productType": { "type": "string" },
+              "productName": { "type": "string" },
+              "productValue": { "type": "number" }
+            }
+          },
+          "budget": {
+            "type": "object",
+            "properties": {
+              "compensationModel": { "type": "string", "enum": ["fixed", "range"] },
+              "currency": { "type": "string" },
+              "fixedAmount": { "type": "number" },
+              "minRangeAmount": { "type": "number" },
+              "maxRangeAmount": { "type": "number" }
+            }
+          },
+          "audience": {
+            "type": "object",
+            "properties": {
+              "ageMin": { "type": "integer" },
+              "ageMax": { "type": "integer" },
+              "gender": { "type": "string" },
+              "targetLocation": { "type": "string" },
+              "minFollowers": { "type": "integer" }
+            }
+          },
+          "tasks": {
+            "type": "object",
+            "properties": {
+              "requiredDeliverables": { "type": "array", "items": { "type": "string" } },
+              "dos": { "type": "array", "items": { "type": "string" } },
+              "donts": { "type": "array", "items": { "type": "string" } }
+            }
+          },
+          "stats": {
+            "type": "object",
+            "properties": {
+              "views": { "type": "integer" },
+              "applications": { "type": "integer" },
+              "acceptedApplications": { "type": "integer" }
+            }
+          },
+          "createdAt": { "type": "string", "format": "date-time" },
+          "updatedAt": { "type": "string", "format": "date-time" }
+        }
+      },
+      "CampaignInput": {
+        "type": "object",
+        "properties": {
+          "campaignTitle": { "type": "string", "minLength": 3 },
+          "description": { "type": "string", "minLength": 10 },
+          "campaignObjectives": { "type": "array", "items": { "type": "string" } },
+          "kpi": { "type": "string" },
+          "isDraft": { "type": "boolean", "description": "If true, validation is relaxed" },
+          "campaignVisibility": { "type": "string", "enum": ["public", "private"] },
+          "campaignStart": { "type": "string", "format": "date-time" },
+          "campaignEnd": { "type": "string", "format": "date-time" }
+        }
+      },
+      "Application": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "campaignId": { "type": "string" },
+          "creatorId": { "type": "string" },
+          "status": { "$ref": "#/components/schemas/ApplicationStatus" },
+          "campaignTitle": { "type": "string" },
+          "coverLetter": { "type": "string" },
+          "proposedRate": { "type": "number" },
+          "createdAt": { "type": "string", "format": "date-time" },
+          "updatedAt": { "type": "string", "format": "date-time" }
+        }
+      },
+      "Deliverable": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "campaignId": { "type": "string" },
+          "applicationId": { "type": "string" },
+          "creatorId": { "type": "string" },
+          "deliverableType": { "type": "string" },
+          "platform": { "$ref": "#/components/schemas/Platform" },
+          "contentUrl": { "type": "string", "format": "uri" },
+          "contentScreenshots": { "type": "array", "items": { "type": "string" } },
+          "caption": { "type": "string" },
+          "hashtags": { "type": "array", "items": { "type": "string" } },
+          "status": { "$ref": "#/components/schemas/DeliverableStatus" },
+          "paymentStatus": { "type": "string", "enum": ["PENDING", "PROCESSING", "COMPLETED", "DISPUTED"] },
+          "createdAt": { "type": "string", "format": "date-time" },
+          "updatedAt": { "type": "string", "format": "date-time" }
+        }
+      },
+      "CreatorList": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "color": { "type": "string" },
+          "creatorCount": { "type": "integer" },
+          "tags": { "type": "array", "items": { "type": "string" } },
+          "mentions": { "type": "array", "items": { "type": "string" } },
+          "locations": { "type": "array", "items": { "type": "string" } },
+          "influenceSize": { "type": "string" },
+          "visibility": { "type": "string", "enum": ["public", "private"] },
+          "createdAt": { "type": "string", "format": "date-time" },
+          "updatedAt": { "type": "string", "format": "date-time" }
+        }
+      },
+      "Invitation": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "campaignId": { "type": "string" },
+          "creatorId": { "type": "string" },
+          "brandId": { "type": "string" },
+          "status": { "type": "string", "enum": ["pending", "accepted", "rejected", "expired"] },
+          "message": { "type": "string" },
+          "createdAt": { "type": "string", "format": "date-time" }
+        }
+      },
+      "InstagramBusinessAccount": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "username": { "type": "string" },
+          "name": { "type": "string" },
+          "profile_picture_url": { "type": "string" },
+          "followers_count": { "type": "integer" },
+          "follows_count": { "type": "integer" },
+          "media_count": { "type": "integer" },
+          "biography": { "type": "string" },
+          "website": { "type": "string" }
+        }
+      },
+      "SuccessResponse": {
+        "type": "object",
+        "properties": {
+          "success": { "type": "boolean", "example": true },
+          "data": { "type": "object" },
+          "count": { "type": "integer" }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "success": { "type": "boolean", "example": false },
+          "error": { "type": "string" },
+          "code": { "type": "string" },
+          "details": { "type": "string" }
+        }
+      }
+    },
+    "responses": {
+      "BadRequest": {
+        "description": "Bad request — validation error or missing fields",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+          }
+        }
+      },
+      "Unauthorized": {
+        "description": "Unauthorized — missing or invalid authentication token",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+          }
+        }
+      },
+      "Forbidden": {
+        "description": "Forbidden — insufficient permissions (wrong role)",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+          }
+        }
+      },
+      "ServerError": {
+        "description": "Internal server error",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+          }
+        }
+      }
+    }
+  }
+}

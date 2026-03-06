@@ -1,0 +1,15 @@
+{
+  "version": "2.0.0",
+  "generatedAt": "2026-03-05T20:37:17.257Z",
+  "platform": "HeyCreator",
+  "counts": {
+    "userStories": 212,
+    "screenshots": 0
+  },
+  "devServerUrl": "http://localhost:3000",
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "previousVersion": "2.0.0"
+}

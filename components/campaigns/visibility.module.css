@@ -1,0 +1,29 @@
+.radioOuter {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+  border: 5px solid #000546; /* brand-navy-dark — cannot use Tailwind theme() in CSS Modules */
+  background: white;
+}
+
+.checked {
+  background: #000546; /* brand-navy-dark */
+  border-color: #000546; /* brand-navy-dark */
+}
+
+.unchecked {
+  background: white;
+  border: 2px solid #acacac;
+}
+
+.innerDot {
+  width: 8px;
+  height: 8px;
+  background: white;
+  border-radius: 50%;
+  display: block;
+}

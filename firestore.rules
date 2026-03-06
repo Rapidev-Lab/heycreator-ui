@@ -1,0 +1,44 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Users: Can read their own document, anyone can create (for signup)
+    match /users/{userId} {
+      allow read, update: if request.auth != null && request.auth.uid == userId;
+      allow create: if request.auth != null;
+    }
+
+    // Unified Profiles: Can read any, but only create/update/delete their own
+    match /unified_profiles/{profileId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null && request.resource.data.userId == request.auth.uid;
+      allow update, delete: if request.auth != null && resource.data.userId == request.auth.uid;
+    }
+
+    // Detailed Data: Read-only for authenticated users. Write only for admin.
+    match /influencer_detailed_data/{profileId} {
+      allow read: if request.auth != null;
+      allow create, update, delete: if false; // Protected for admin access via backend
+    }
+
+    // Content Posts: Read-only for authenticated users. Write only for admin.
+    match /content_posts/{postId} {
+      allow read: if request.auth != null;
+      allow create, update, delete: if false; // Protected for admin access via backend
+    }
+
+    // Brand Profiles: Can read any, but only create/update/delete their own
+    match /brand_profiles/{brandId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null && request.resource.data.userId == request.auth.uid;
+      allow update, delete: if request.auth != null && resource.data.userId == request.auth.uid;
+    }
+
+    // Influencer Profiles (legacy or simple profiles): Can read any, but only create/update/delete their own
+    match /influencer_profiles/{profileId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null && request.resource.data.userId == request.auth.uid;
+      allow update, delete: if request.auth != null && resource.data.userId == request.auth.uid;
+    }
+  }
+}

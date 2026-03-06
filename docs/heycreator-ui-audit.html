@@ -1,0 +1,1193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HeyCreator UI Audit &mdash; Flows, Screens &amp; Components</title>
+<style>
+:root{--navy:#001F54;--navy-dark:#000546;--navy-light:#0D3B7A;--cyan:#00A8CC;--bg:#F5F7FA;--card:#FFFFFF;--text:#1F2937;--muted:#6B7280;--border:#E5E7EB;--success:#10B981;--warning:#F59E0B;--error:#EF4444;--info:#3B82F6;--accent:#FF3B30;--sidebar-w:280px;--radius:12px}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;display:flex;min-height:100vh}
+/* SIDEBAR */
+.sidebar{position:fixed;top:0;left:0;width:var(--sidebar-w);height:100vh;background:var(--navy);color:#fff;overflow-y:auto;z-index:100;padding:24px 0;transition:transform .3s}
+.sidebar h1{font-size:18px;font-weight:700;padding:0 20px 16px;border-bottom:1px solid rgba(255,255,255,.15);margin-bottom:12px;letter-spacing:-.3px}
+.sidebar h1 span{color:var(--cyan);font-weight:400}
+.nav-group{margin-bottom:8px}
+.nav-group-title{font-size:10px;text-transform:uppercase;letter-spacing:1.2px;color:rgba(255,255,255,.4);padding:8px 20px 4px;font-weight:600}
+.nav-link{display:block;padding:7px 20px 7px 28px;color:rgba(255,255,255,.75);text-decoration:none;font-size:13px;transition:all .15s;border-left:3px solid transparent}
+.nav-link:hover,.nav-link.active{color:#fff;background:rgba(255,255,255,.08);border-left-color:var(--cyan)}
+.nav-link .badge{display:inline-block;font-size:10px;padding:1px 6px;border-radius:8px;margin-left:6px;font-weight:600}
+.badge-red{background:var(--error);color:#fff}
+.badge-amber{background:var(--warning);color:#fff}
+.badge-green{background:var(--success);color:#fff}
+.badge-blue{background:var(--info);color:#fff}
+/* MAIN */
+.main{margin-left:var(--sidebar-w);flex:1;padding:32px 40px 80px}
+.section{margin-bottom:48px;scroll-margin-top:24px}
+.section-title{font-size:28px;font-weight:700;color:var(--navy);margin-bottom:4px;display:flex;align-items:center;gap:10px}
+.section-subtitle{font-size:14px;color:var(--muted);margin-bottom:24px}
+/* CARDS */
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:24px;margin-bottom:16px;transition:box-shadow .2s}
+.card:hover{box-shadow:0 4px 12px rgba(0,31,84,.08)}
+.card-title{font-size:16px;font-weight:600;margin-bottom:8px;color:var(--navy)}
+.card-subtitle{font-size:13px;color:var(--muted);margin-bottom:12px}
+/* FLOW DIAGRAMS */
+.flow-container{overflow-x:auto;padding:16px 0}
+.flow{display:flex;align-items:flex-start;gap:0;flex-wrap:nowrap;min-width:max-content}
+.flow-step{background:var(--card);border:2px solid var(--border);border-radius:var(--radius);padding:14px 18px;min-width:160px;max-width:200px;text-align:center;position:relative;font-size:12px;line-height:1.4}
+.flow-step .step-label{font-weight:600;color:var(--navy);font-size:13px;margin-bottom:4px}
+.flow-step .step-desc{color:var(--muted);font-size:11px}
+.flow-step.current{border-color:var(--cyan);background:rgba(0,168,204,.05)}
+.flow-step.proposed{border-color:var(--success);background:rgba(16,185,129,.05);border-style:dashed}
+.flow-step.missing{border-color:var(--error);background:rgba(239,68,68,.04);border-style:dashed}
+.flow-arrow{display:flex;align-items:center;padding:0 4px;color:var(--muted);font-size:18px;flex-shrink:0;margin-top:18px}
+.flow-arrow.proposed-arrow{color:var(--success)}
+/* STATUS PILLS */
+.status{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px;white-space:nowrap}
+.status-good{background:#D1FAE5;color:#065F46}
+.status-warn{background:#FEF3C7;color:#92400E}
+.status-bad{background:#FEE2E2;color:#991B1B}
+.status-info{background:#DBEAFE;color:#1E40AF}
+.status-new{background:#E0F7FC;color:#0090B0}
+/* GRID */
+.grid{display:grid;gap:16px}
+.grid-2{grid-template-columns:repeat(2,1fr)}
+.grid-3{grid-template-columns:repeat(3,1fr)}
+.grid-4{grid-template-columns:repeat(4,1fr)}
+@media(max-width:1200px){.grid-4{grid-template-columns:repeat(2,1fr)}.grid-3{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:900px){.grid-2,.grid-3,.grid-4{grid-template-columns:1fr}.main{margin-left:0;padding:20px}}
+/* TABLES */
+.table-wrap{overflow-x:auto;border-radius:var(--radius);border:1px solid var(--border)}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{background:var(--navy);color:#fff;text-align:left;padding:10px 14px;font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.5px}
+td{padding:10px 14px;border-bottom:1px solid var(--border);vertical-align:top}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(0,168,204,.03)}
+/* COMPONENT MAP */
+.comp-group{margin-bottom:24px}
+.comp-group-title{font-size:14px;font-weight:700;color:var(--navy);padding:8px 14px;background:rgba(0,31,84,.04);border-radius:8px;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.comp-group-title .count{font-size:11px;background:var(--navy);color:#fff;padding:2px 8px;border-radius:10px}
+.comp-item{display:flex;align-items:center;gap:10px;padding:6px 14px;font-size:13px;border-radius:6px;transition:background .15s}
+.comp-item:hover{background:rgba(0,168,204,.05)}
+.comp-name{font-weight:600;color:var(--navy);min-width:200px}
+.comp-desc{color:var(--muted);flex:1}
+/* LEGEND */
+.legend{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:20px;font-size:12px}
+.legend-item{display:flex;align-items:center;gap:6px}
+.legend-dot{width:12px;height:12px;border-radius:50%;flex-shrink:0}
+/* TIKTOK MOCKUP */
+.mockup-container{display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:start}
+.mockup{border:2px solid var(--border);border-radius:20px;overflow:hidden;background:#000;position:relative;aspect-ratio:9/16;max-width:320px}
+.mockup-label{text-align:center;font-size:13px;font-weight:600;color:var(--navy);margin-top:12px}
+.mockup-current{background:var(--card);aspect-ratio:auto;max-width:100%;border-radius:var(--radius)}
+.mockup-phone{background:linear-gradient(180deg,#0a0a0a 0%,#1a1a2e 100%)}
+.phone-header{display:flex;justify-content:space-between;padding:12px 16px;color:#fff;font-size:13px;font-weight:600}
+.phone-tabs{display:flex;justify-content:center;gap:20px;padding:8px 16px;color:rgba(255,255,255,.5);font-size:12px;font-weight:500}
+.phone-tabs .active-tab{color:#fff;border-bottom:2px solid #fff;padding-bottom:4px}
+.phone-content{position:relative;height:380px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);display:flex;align-items:center;justify-content:center}
+.phone-content .play-btn{width:56px;height:56px;background:rgba(255,255,255,.3);border-radius:50%;display:flex;align-items:center;justify-content:center}
+.phone-content .play-btn::after{content:'';border-left:20px solid #fff;border-top:12px solid transparent;border-bottom:12px solid transparent;margin-left:4px}
+.phone-overlay{position:absolute;bottom:0;left:0;right:0;padding:16px;background:linear-gradient(transparent,rgba(0,0,0,.7));color:#fff}
+.phone-overlay .creator-name{font-weight:700;font-size:14px;margin-bottom:2px}
+.phone-overlay .creator-handle{font-size:12px;opacity:.8;margin-bottom:6px}
+.phone-overlay .caption{font-size:12px;opacity:.9;line-height:1.4}
+.phone-sidebar{position:absolute;right:12px;bottom:100px;display:flex;flex-direction:column;gap:16px;align-items:center}
+.phone-sidebar .action{text-align:center;color:#fff}
+.phone-sidebar .action-icon{width:36px;height:36px;background:rgba(255,255,255,.2);border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:2px;font-size:16px}
+.phone-sidebar .action-count{font-size:10px}
+.phone-nav{display:flex;justify-content:space-around;padding:12px 16px;background:#000;color:rgba(255,255,255,.5);font-size:10px;font-weight:500}
+.phone-nav .nav-active{color:#fff}
+/* STATS ROW */
+.stats-row{display:flex;gap:16px;margin-bottom:24px;flex-wrap:wrap}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;flex:1;min-width:180px;text-align:center}
+.stat-number{font-size:32px;font-weight:700;color:var(--navy)}
+.stat-label{font-size:12px;color:var(--muted);margin-top:4px;text-transform:uppercase;letter-spacing:.5px}
+/* IMPROVEMENT CARDS */
+.improvement{border-left:4px solid;padding-left:16px;margin-bottom:16px}
+.improvement.high{border-color:var(--error)}
+.improvement.medium{border-color:var(--warning)}
+.improvement.low{border-color:var(--info)}
+.improvement.feature{border-color:var(--success)}
+.improvement-title{font-weight:600;font-size:14px;margin-bottom:4px}
+.improvement-desc{font-size:13px;color:var(--muted);line-height:1.5}
+/* COMPARISON */
+.compare{display:grid;grid-template-columns:1fr auto 1fr;gap:16px;align-items:start;margin-bottom:24px}
+.compare-arrow{display:flex;align-items:center;justify-content:center;font-size:24px;color:var(--success);padding-top:40px}
+.compare-box{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px}
+.compare-box.current-box{border-color:var(--warning)}
+.compare-box.proposed-box{border-color:var(--success)}
+.compare-label{font-size:11px;text-transform:uppercase;letter-spacing:1px;font-weight:600;margin-bottom:8px}
+.compare-label.current-label{color:var(--warning)}
+.compare-label.proposed-label{color:var(--success)}
+/* SCREEN MAP */
+.screen-group{margin-bottom:24px}
+.screen-group-title{font-size:15px;font-weight:700;color:var(--navy);margin-bottom:10px;padding-bottom:6px;border-bottom:2px solid var(--border);display:flex;align-items:center;gap:8px}
+.screen-group-title .icon{font-size:18px}
+.screen-item{display:flex;align-items:flex-start;gap:12px;padding:8px 0;border-bottom:1px solid rgba(0,0,0,.04);font-size:13px}
+.screen-route{font-family:'SF Mono',Monaco,Consolas,monospace;font-size:12px;color:var(--cyan);background:rgba(0,168,204,.08);padding:2px 8px;border-radius:4px;white-space:nowrap;min-width:260px}
+.screen-desc{color:var(--text);flex:1}
+/* COLLAPSIBLE */
+details{margin-bottom:8px}
+details summary{cursor:pointer;font-weight:600;font-size:14px;padding:10px 14px;background:rgba(0,31,84,.03);border-radius:8px;list-style:none;display:flex;align-items:center;gap:8px}
+details summary::before{content:'▶';font-size:10px;transition:transform .2s}
+details[open] summary::before{transform:rotate(90deg)}
+details .detail-content{padding:12px 14px}
+/* PROPOSED FEATURE CARD */
+.feature-card{background:linear-gradient(135deg,rgba(0,168,204,.05) 0%,rgba(16,185,129,.05) 100%);border:2px dashed var(--success);border-radius:var(--radius);padding:24px;margin-bottom:20px}
+.feature-card h3{color:var(--success);font-size:16px;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+/* TABS */
+.tab-bar{display:flex;gap:0;border-bottom:2px solid var(--border);margin-bottom:20px}
+.tab{padding:10px 20px;font-size:13px;font-weight:600;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .15s}
+.tab:hover{color:var(--navy)}
+.tab.active{color:var(--navy);border-bottom-color:var(--navy)}
+.tab-content{display:none}
+.tab-content.active{display:block}
+/* PRINT */
+@media print{.sidebar{display:none}.main{margin-left:0}}
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR NAVIGATION -->
+<nav class="sidebar" id="sidebar">
+  <h1>HeyCreator <span>UI Audit</span></h1>
+
+  <div class="nav-group">
+    <div class="nav-group-title">Overview</div>
+    <a href="#overview" class="nav-link">Dashboard</a>
+    <a href="#stats" class="nav-link">Platform Stats</a>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-group-title">User Flows</div>
+    <a href="#flow-auth" class="nav-link">Authentication</a>
+    <a href="#flow-discovery" class="nav-link">Discovery &amp; Search <span class="badge badge-amber">!</span></a>
+    <a href="#flow-campaigns" class="nav-link">Campaign Management</a>
+    <a href="#flow-marketplace" class="nav-link">Marketplace</a>
+    <a href="#flow-profile" class="nav-link">Creator Profile</a>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-group-title">Screen Maps</div>
+    <a href="#screens-auth" class="nav-link">Auth Screens <span class="badge badge-green">14</span></a>
+    <a href="#screens-influencer" class="nav-link">Influencer Screens <span class="badge badge-green">15</span></a>
+    <a href="#screens-brand" class="nav-link">Brand Screens <span class="badge badge-green">15</span></a>
+    <a href="#screens-campaign" class="nav-link">Campaign Screens <span class="badge badge-green">5</span></a>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-group-title">Component Audit</div>
+    <a href="#comp-duplicates" class="nav-link">Duplicates <span class="badge badge-red">37</span></a>
+    <a href="#comp-inventory" class="nav-link">Full Inventory</a>
+    <a href="#comp-consolidation" class="nav-link">Consolidation Map</a>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-group-title">Improvements</div>
+    <a href="#tiktok-discovery" class="nav-link">TikTok-Style Discovery <span class="badge badge-blue">NEW</span></a>
+    <a href="#missing-ux" class="nav-link">Missing UX Patterns <span class="badge badge-red">7</span></a>
+    <a href="#accessibility" class="nav-link">Accessibility Gaps</a>
+    <a href="#best-practices" class="nav-link">Best Practices</a>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-group-title">Action Plan</div>
+    <a href="#priorities" class="nav-link">Priority Roadmap</a>
+  </div>
+</nav>
+
+<!-- MAIN CONTENT -->
+<main class="main">
+
+<!-- ============================================================ -->
+<!-- OVERVIEW -->
+<!-- ============================================================ -->
+<section class="section" id="overview">
+  <h2 class="section-title">&#128202; HeyCreator UI Audit</h2>
+  <p class="section-subtitle">Comprehensive visual audit of all user flows, screens, components, and areas for improvement. Last updated: March 2026.</p>
+
+  <div id="stats" class="stats-row">
+    <div class="stat-card"><div class="stat-number">68</div><div class="stat-label">Screens / Routes</div></div>
+    <div class="stat-card"><div class="stat-number">250+</div><div class="stat-label">React Components</div></div>
+    <div class="stat-card"><div class="stat-number">37</div><div class="stat-label">Duplicate Components</div></div>
+    <div class="stat-card"><div class="stat-number">17</div><div class="stat-label">Modal Variants</div></div>
+    <div class="stat-card"><div class="stat-number">7</div><div class="stat-label">Missing UX Patterns</div></div>
+  </div>
+
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:var(--navy)"></div> Current (working)</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--cyan)"></div> Active step</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--success);border:2px dashed var(--success)"></div> Proposed improvement</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--error);border:2px dashed var(--error)"></div> Missing / needs work</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--warning)"></div> Needs improvement</div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- AUTHENTICATION FLOW -->
+<!-- ============================================================ -->
+<section class="section" id="flow-auth">
+  <h2 class="section-title">&#128274; Authentication Flows</h2>
+  <p class="section-subtitle">Role-based auth with separate influencer and brand signup journeys. 14 auth screens total.</p>
+
+  <div class="card">
+    <div class="card-title">Influencer Signup Flow</div>
+    <div class="card-subtitle">7 steps from role selection to dashboard access</div>
+    <div class="flow-container">
+      <div class="flow">
+        <div class="flow-step"><div class="step-label">/ (Home)</div><div class="step-desc">Role Selection</div></div>
+        <div class="flow-arrow">&#8594;</div>
+        <div class="flow-step"><div class="step-label">Login</div><div class="step-desc">Email/Phone + Social Auth</div></div>
+        <div class="flow-arrow">&#8594;</div>
+        <div class="flow-step"><div class="step-label">Email Signup</div><div class="step-desc">Name, Email, Password</div></div>
+        <div class="flow-arrow">&#8594;</div>
+        <div class="flow-step"><div class="step-label">Verify Email</div><div class="step-desc">Firebase email link</div></div>
+        <div class="flow-arrow">&#8594;</div>
+        <div class="flow-step"><div class="step-label">Connect Social</div><div class="step-desc">Instagram verification</div></div>
+        <div class="flow-arrow">&#8594;</div>
+        <div class="flow-step"><div class="step-label">Complete Profile</div><div class="step-desc">Bio, categories, avatar</div></div>
+        <div class="flow-arrow">&#8594;</div>
+        <div class="flow-step current"><div class="step-label">Dashboard</div><div class="step-desc">/influencers</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Brand Signup Flow</div>
+    <div class="card-subtitle">Multi-step wizard: Account &rarr; Company &rarr; Social &rarr; Dashboard</div>
+    <div class="flow-container">
+      <div class="flow">
+        <div class="flow-step"><div class="step-label">/ (Home)</div><div class="step-desc">Role Selection</div></div>
+        <div class="flow-arrow">&#8594;</div>
+        <div class="flow-step"><div class="step-label">Login</div><div class="step-desc">Email + Social Auth</div></div>
+        <div class="flow-arrow">&#8594;</div>
+        <div class="flow-step"><div class="step-label">Step 1: Account</div><div class="step-desc">Name, email, password (33%)</div></div>
+        <div class="flow-arrow">&#8594;</div>
+        <div class="flow-step"><div class="step-label">Step 2: Company</div><div class="step-desc">Company, industry, size (67%)</div></div>
+        <div class="flow-arrow">&#8594;</div>
+        <div class="flow-step"><div class="step-label">Step 3: Social</div><div class="step-desc">Optional social links (100%)</div></div>
+        <div class="flow-arrow">&#8594;</div>
+        <div class="flow-step current"><div class="step-label">Dashboard</div><div class="step-desc">/brands/dashboard</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Password Reset Flow</div>
+    <div class="card-subtitle">Role-aware reset with Firebase oobCode handling</div>
+    <div class="flow-container">
+      <div class="flow">
+        <div class="flow-step"><div class="step-label">Forgot Password</div><div class="step-desc">Enter email</div></div>
+        <div class="flow-arrow">&#8594;</div>
+        <div class="flow-step"><div class="step-label">Email Link</div><div class="step-desc">Firebase sends reset link</div></div>
+        <div class="flow-arrow">&#8594;</div>
+        <div class="flow-step"><div class="step-label">Role Detection</div><div class="step-desc">/auth/reset-password detects role</div></div>
+        <div class="flow-arrow">&#8594;</div>
+        <div class="flow-step"><div class="step-label">New Password</div><div class="step-desc">Role-specific reset page</div></div>
+        <div class="flow-arrow">&#8594;</div>
+        <div class="flow-step current"><div class="step-label">Success</div><div class="step-desc">Back to login</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="border-left:4px solid var(--warning)">
+    <div class="card-title">&#9888;&#65039; Auth Issues to Address</div>
+    <div class="improvement medium"><div class="improvement-title">Two Auth Contexts</div><div class="improvement-desc"><code>/lib/firebase/auth-context.tsx</code> (primary) and <code>/lib/context/AuthContext.tsx</code> (compatibility layer) create import confusion. Consolidate into one.</div></div>
+    <div class="improvement medium"><div class="improvement-title">No Protected Route Middleware</div><div class="improvement-desc">Pages rely on client-side guards (ProfileCompletionGuard, EmailVerificationGuard). No server-side middleware for API route protection. Uses <code>x-user-id</code> header instead of JWT.</div></div>
+    <div class="improvement low"><div class="improvement-title">Deprecated Mock Context</div><div class="improvement-desc"><code>/lib/mock/mock-auth-context.tsx</code> should be removed.</div></div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- DISCOVERY FLOW (with TikTok proposal) -->
+<!-- ============================================================ -->
+<section class="section" id="flow-discovery">
+  <h2 class="section-title">&#128269; Discovery &amp; Search Flow</h2>
+  <p class="section-subtitle">Brand discovers creators via hybrid search (Firestore + live APIs). Currently profile-card based.</p>
+
+  <div class="card">
+    <div class="card-title">Current Discovery Flow (Brand)</div>
+    <div class="card-subtitle">Search &rarr; Profile Cards &rarr; Creator Profile</div>
+    <div class="flow-container">
+      <div class="flow">
+        <div class="flow-step"><div class="step-label">Discovery Page</div><div class="step-desc">Platform selector, keyword, location, vetted toggle</div></div>
+        <div class="flow-arrow">&#8594;</div>
+        <div class="flow-step"><div class="step-label">Hybrid Search</div><div class="step-desc">Firestore DB + Live APIs (SSE streaming)</div></div>
+        <div class="flow-arrow">&#8594;</div>
+        <div class="flow-step"><div class="step-label">Results Grid</div><div class="step-desc">Profile cards with stats (name, handle, followers)</div></div>
+        <div class="flow-arrow">&#8594;</div>
+        <div class="flow-step"><div class="step-label">Creator Profile</div><div class="step-desc">4 tabs: Overview, Content, Demographics, Analytics</div></div>
+        <div class="flow-arrow">&#8594;</div>
+        <div class="flow-step"><div class="step-label">Actions</div><div class="step-desc">Add to Campaign / Chat / Save</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- TIKTOK-STYLE DISCOVERY (MAJOR PROPOSAL) -->
+<!-- ============================================================ -->
+<section class="section" id="tiktok-discovery">
+  <h2 class="section-title">&#127916; Proposed: TikTok-Style Content Discovery</h2>
+  <p class="section-subtitle">Transform discovery from static profile cards into an engaging, content-first experience. Brands discover creators through their best content, not just their stats.</p>
+
+  <div class="feature-card">
+    <h3>&#10024; Why Content-First Discovery?</h3>
+    <p style="font-size:14px;color:var(--text);line-height:1.7">
+      Currently, brands search and get a grid of profile cards showing names, follower counts, and handles. This is functional but doesn't help brands evaluate <em>content quality</em> &mdash; the #1 factor in creator selection. A TikTok-style feed lets brands:
+    </p>
+    <ul style="margin:12px 0 0 20px;font-size:14px;line-height:2;color:var(--text)">
+      <li><strong>See content first</strong> &mdash; Video thumbnails, reels, posts as the primary display</li>
+      <li><strong>Evaluate style &amp; quality</strong> &mdash; Before viewing any stats</li>
+      <li><strong>Discover through engagement</strong> &mdash; Swipe, like, save, shortlist in a natural flow</li>
+      <li><strong>Reduce decision fatigue</strong> &mdash; One creator at a time vs. overwhelming grid</li>
+      <li><strong>Mobile-native experience</strong> &mdash; Feels natural on phones and tablets</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Proposed Discovery Flow (Content-First)</div>
+    <div class="card-subtitle">Content Feed &rarr; Swipe/Engage &rarr; Creator Profile &rarr; Campaign Invite</div>
+    <div class="flow-container">
+      <div class="flow">
+        <div class="flow-step proposed"><div class="step-label">Content Feed</div><div class="step-desc">Full-screen video/image feed from top creators</div></div>
+        <div class="flow-arrow proposed-arrow">&#8594;</div>
+        <div class="flow-step proposed"><div class="step-label">Swipe &amp; Engage</div><div class="step-desc">Like, save, shortlist, skip</div></div>
+        <div class="flow-arrow proposed-arrow">&#8594;</div>
+        <div class="flow-step proposed"><div class="step-label">Quick Stats</div><div class="step-desc">Overlay: followers, engagement, niche</div></div>
+        <div class="flow-arrow proposed-arrow">&#8594;</div>
+        <div class="flow-step"><div class="step-label">Creator Profile</div><div class="step-desc">Tap to see full profile</div></div>
+        <div class="flow-arrow">&#8594;</div>
+        <div class="flow-step"><div class="step-label">Invite to Campaign</div><div class="step-desc">Direct action from feed</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Side-by-side mockup -->
+  <h3 style="font-size:18px;font-weight:700;color:var(--navy);margin:32px 0 16px">Current vs. Proposed UI Concept</h3>
+  <div class="mockup-container">
+    <!-- CURRENT STATE -->
+    <div>
+      <div class="compare-label current-label">&#9888;&#65039; CURRENT: Profile Card Grid</div>
+      <div class="mockup mockup-current" style="padding:20px">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+          <div style="background:var(--bg);border-radius:12px;padding:16px;text-align:center">
+            <div style="width:48px;height:48px;background:var(--navy);border-radius:50%;margin:0 auto 8px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:16px">JD</div>
+            <div style="font-weight:600;font-size:13px;color:var(--navy)">Jane Doe</div>
+            <div style="font-size:11px;color:var(--muted)">@janedoe</div>
+            <div style="display:flex;justify-content:center;gap:12px;margin-top:8px;font-size:10px;color:var(--muted)">
+              <span>125K &#128101;</span><span>4.2% &#128200;</span>
+            </div>
+            <div style="margin-top:8px;display:flex;gap:4px;justify-content:center;flex-wrap:wrap">
+              <span style="font-size:9px;background:rgba(0,168,204,.1);color:var(--cyan);padding:2px 6px;border-radius:4px">Fashion</span>
+              <span style="font-size:9px;background:rgba(0,168,204,.1);color:var(--cyan);padding:2px 6px;border-radius:4px">Beauty</span>
+            </div>
+          </div>
+          <div style="background:var(--bg);border-radius:12px;padding:16px;text-align:center">
+            <div style="width:48px;height:48px;background:var(--cyan);border-radius:50%;margin:0 auto 8px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:16px">MC</div>
+            <div style="font-weight:600;font-size:13px;color:var(--navy)">Mark Chen</div>
+            <div style="font-size:11px;color:var(--muted)">@markchen</div>
+            <div style="display:flex;justify-content:center;gap:12px;margin-top:8px;font-size:10px;color:var(--muted)">
+              <span>89K &#128101;</span><span>3.8% &#128200;</span>
+            </div>
+            <div style="margin-top:8px;display:flex;gap:4px;justify-content:center;flex-wrap:wrap">
+              <span style="font-size:9px;background:rgba(0,168,204,.1);color:var(--cyan);padding:2px 6px;border-radius:4px">Tech</span>
+              <span style="font-size:9px;background:rgba(0,168,204,.1);color:var(--cyan);padding:2px 6px;border-radius:4px">Gaming</span>
+            </div>
+          </div>
+          <div style="background:var(--bg);border-radius:12px;padding:16px;text-align:center">
+            <div style="width:48px;height:48px;background:#F59E0B;border-radius:50%;margin:0 auto 8px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:16px">SA</div>
+            <div style="font-weight:600;font-size:13px;color:var(--navy)">Sarah A.</div>
+            <div style="font-size:11px;color:var(--muted)">@sarah_fit</div>
+            <div style="display:flex;justify-content:center;gap:12px;margin-top:8px;font-size:10px;color:var(--muted)">
+              <span>310K &#128101;</span><span>5.1% &#128200;</span>
+            </div>
+          </div>
+          <div style="background:var(--bg);border-radius:12px;padding:16px;text-align:center">
+            <div style="width:48px;height:48px;background:#10B981;border-radius:50%;margin:0 auto 8px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:16px">TW</div>
+            <div style="font-weight:600;font-size:13px;color:var(--navy)">Tom W.</div>
+            <div style="font-size:11px;color:var(--muted)">@tomwilson</div>
+            <div style="display:flex;justify-content:center;gap:12px;margin-top:8px;font-size:10px;color:var(--muted)">
+              <span>45K &#128101;</span><span>7.3% &#128200;</span>
+            </div>
+          </div>
+        </div>
+        <p style="text-align:center;margin-top:16px;font-size:11px;color:var(--muted)">Static cards &bull; Stats-first &bull; No content preview &bull; Decision fatigue</p>
+      </div>
+    </div>
+
+    <!-- PROPOSED STATE -->
+    <div>
+      <div class="compare-label proposed-label">&#10024; PROPOSED: Content-First Feed</div>
+      <div class="mockup mockup-phone" style="max-width:280px;margin:0 auto">
+        <div class="phone-header">
+          <span>&#9776;</span>
+          <span style="font-size:15px">Discover</span>
+          <span>&#128269;</span>
+        </div>
+        <div class="phone-tabs">
+          <span>For You</span>
+          <span class="active-tab">Trending</span>
+          <span>Fashion</span>
+          <span>Tech</span>
+        </div>
+        <div class="phone-content">
+          <div class="play-btn"></div>
+          <div class="phone-overlay">
+            <div class="creator-name">&#9989; Sarah Anderson</div>
+            <div class="creator-handle">@sarah_fit &bull; 310K followers &bull; 5.1% eng</div>
+            <div class="caption">Morning workout routine that grew my audience 40% &#128170;&#127995; #fitness #creator</div>
+          </div>
+          <div class="phone-sidebar">
+            <div class="action"><div class="action-icon">&#128150;</div><div class="action-count">24.5K</div></div>
+            <div class="action"><div class="action-icon">&#128172;</div><div class="action-count">1,203</div></div>
+            <div class="action"><div class="action-icon">&#128278;</div><div class="action-count">Share</div></div>
+            <div class="action"><div class="action-icon">&#9733;</div><div class="action-count">Save</div></div>
+            <div class="action"><div class="action-icon" style="background:var(--cyan)">+</div><div class="action-count">Invite</div></div>
+          </div>
+        </div>
+        <div class="phone-nav">
+          <span>&#127968; Home</span>
+          <span class="nav-active">&#128269; Discover</span>
+          <span>&#128101; Creators</span>
+          <span>&#128188; Campaigns</span>
+          <span>&#128100; Profile</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- New screens needed -->
+  <h3 style="font-size:18px;font-weight:700;color:var(--navy);margin:32px 0 16px">New Screens &amp; Components Required</h3>
+  <div class="grid grid-2">
+    <div class="card">
+      <div class="card-title" style="color:var(--success)">&#127916; Content Feed View</div>
+      <ul style="font-size:13px;line-height:2;color:var(--text);margin-left:16px">
+        <li>Full-screen vertical scroll (like TikTok/Reels)</li>
+        <li>Video autoplay with mute toggle</li>
+        <li>Image carousel for photo posts</li>
+        <li>Category tabs (For You, Trending, by niche)</li>
+        <li>Infinite scroll with progressive loading</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-title" style="color:var(--success)">&#128100; Creator Quick Profile</div>
+      <ul style="font-size:13px;line-height:2;color:var(--text);margin-left:16px">
+        <li>Slide-up panel over content (half-screen)</li>
+        <li>Avatar, name, followers, engagement rate</li>
+        <li>Top 3 content thumbnails</li>
+        <li>Quick action buttons: Invite / Save / Chat</li>
+        <li>Tap to open full profile page</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-title" style="color:var(--success)">&#127991; Content Engagement Overlay</div>
+      <ul style="font-size:13px;line-height:2;color:var(--text);margin-left:16px">
+        <li>Right-side action bar (like, save, share, invite)</li>
+        <li>Bottom overlay (creator name, handle, caption)</li>
+        <li>Engagement stats (views, likes, comments)</li>
+        <li>Platform badge (Instagram/TikTok/YouTube)</li>
+        <li>Swipe up for more from this creator</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-title" style="color:var(--success)">&#128202; Smart Filters</div>
+      <ul style="font-size:13px;line-height:2;color:var(--text);margin-left:16px">
+        <li>Content type filter (Video, Reel, Photo, Story)</li>
+        <li>Performance filter (viral, high-engagement)</li>
+        <li>Niche/category horizontal scroll tabs</li>
+        <li>Location-based content filtering</li>
+        <li>"Similar to" based on saved creators</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card" style="border-left:4px solid var(--success)">
+    <div class="card-title">Implementation Approach</div>
+    <div class="card-subtitle">Leverage existing enrichment pipeline + new UI layer</div>
+    <div class="flow-container">
+      <div class="flow">
+        <div class="flow-step proposed"><div class="step-label">Enrichment API</div><div class="step-desc">Already fetches posts, thumbnails, engagement from Apify</div></div>
+        <div class="flow-arrow proposed-arrow">&#8594;</div>
+        <div class="flow-step proposed"><div class="step-label">Content Index</div><div class="step-desc">New: Index top posts by niche, engagement, recency</div></div>
+        <div class="flow-arrow proposed-arrow">&#8594;</div>
+        <div class="flow-step proposed"><div class="step-label">Feed Algorithm</div><div class="step-desc">New: Rank content by relevance + brand preferences</div></div>
+        <div class="flow-arrow proposed-arrow">&#8594;</div>
+        <div class="flow-step proposed"><div class="step-label">Feed UI</div><div class="step-desc">New: TikTok-style vertical scroll component</div></div>
+        <div class="flow-arrow proposed-arrow">&#8594;</div>
+        <div class="flow-step"><div class="step-label">Existing Profile</div><div class="step-desc">Existing: 4-tab creator profile page</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Dual View Mode</div>
+    <div class="card-subtitle">Let users toggle between classic grid and content feed</div>
+    <div class="grid grid-3" style="margin-top:12px">
+      <div style="text-align:center;padding:16px;background:var(--bg);border-radius:12px">
+        <div style="font-size:24px;margin-bottom:8px">&#128202;</div>
+        <div style="font-weight:600;font-size:13px;color:var(--navy)">Grid View</div>
+        <div style="font-size:11px;color:var(--muted)">Classic profile cards with stats. Good for comparing multiple creators side-by-side.</div>
+      </div>
+      <div style="text-align:center;padding:16px;background:rgba(0,168,204,.05);border-radius:12px;border:2px solid var(--cyan)">
+        <div style="font-size:24px;margin-bottom:8px">&#127916;</div>
+        <div style="font-weight:600;font-size:13px;color:var(--cyan)">Content Feed</div>
+        <div style="font-size:11px;color:var(--muted)">TikTok-style vertical scroll. Best for evaluating content quality and style.</div>
+      </div>
+      <div style="text-align:center;padding:16px;background:var(--bg);border-radius:12px">
+        <div style="font-size:24px;margin-bottom:8px">&#128203;</div>
+        <div style="font-weight:600;font-size:13px;color:var(--navy)">List View</div>
+        <div style="font-size:11px;color:var(--muted)">Compact rows with key metrics. Efficient for data-driven selection.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- CAMPAIGN FLOW -->
+<!-- ============================================================ -->
+<section class="section" id="flow-campaigns">
+  <h2 class="section-title">&#128188; Campaign Management Flow</h2>
+  <p class="section-subtitle">6-step campaign creation wizard (Brand) with full lifecycle management.</p>
+
+  <div class="card">
+    <div class="card-title">Campaign Creation (Brand) &mdash; 6-Step Wizard</div>
+    <div class="flow-container">
+      <div class="flow">
+        <div class="flow-step"><div class="step-label">Step 1: Details</div><div class="step-desc">Title, description, objectives, KPIs</div></div>
+        <div class="flow-arrow">&#8594;</div>
+        <div class="flow-step"><div class="step-label">Step 2: Product</div><div class="step-desc">Product image &amp; description</div></div>
+        <div class="flow-arrow">&#8594;</div>
+        <div class="flow-step"><div class="step-label">Step 3: Audience</div><div class="step-desc">Platforms, categories, engagement</div></div>
+        <div class="flow-arrow">&#8594;</div>
+        <div class="flow-step"><div class="step-label">Step 4: Budget</div><div class="step-desc">Compensation, budget, dates</div></div>
+        <div class="flow-arrow">&#8594;</div>
+        <div class="flow-step"><div class="step-label">Step 5: Tasks</div><div class="step-desc">Deliverables, requirements, screening</div></div>
+        <div class="flow-arrow">&#8594;</div>
+        <div class="flow-step"><div class="step-label">Step 6: Review</div><div class="step-desc">Review &amp; Publish</div></div>
+        <div class="flow-arrow">&#8594;</div>
+        <div class="flow-step current"><div class="step-label">Published</div><div class="step-desc">Live on marketplace</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Campaign Dashboard (Brand) &mdash; Post-Publish</div>
+    <div class="flow-container">
+      <div class="flow">
+        <div class="flow-step current"><div class="step-label">Overview</div><div class="step-desc">Stats, timeline, budget, files</div></div>
+        <div class="flow-arrow">&#8594;</div>
+        <div class="flow-step"><div class="step-label">Creators</div><div class="step-desc">Applications, approvals, invites</div></div>
+        <div class="flow-arrow">&#8594;</div>
+        <div class="flow-step"><div class="step-label">Content</div><div class="step-desc">Deliverables, reviews, submissions</div></div>
+        <div class="flow-arrow">&#8594;</div>
+        <div class="flow-step"><div class="step-label">Analytics</div><div class="step-desc">Performance, ROI metrics</div></div>
+      </div>
+    </div>
+    <div style="margin-top:12px;font-size:12px;color:var(--muted)">Modals: Invite Creators | View Brief | Share Campaign | Review Deliverables</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Campaign Lifecycle</div>
+    <div class="flow-container">
+      <div class="flow">
+        <div class="flow-step" style="border-color:#D1D5DB"><div class="step-label">Draft</div><div class="step-desc">Saved but not published</div></div>
+        <div class="flow-arrow">&#8594;</div>
+        <div class="flow-step" style="border-color:var(--info)"><div class="step-label">Published</div><div class="step-desc">Visible on marketplace</div></div>
+        <div class="flow-arrow">&#8594;</div>
+        <div class="flow-step" style="border-color:var(--success)"><div class="step-label">Active</div><div class="step-desc">Creators working</div></div>
+        <div class="flow-arrow">&#8594;</div>
+        <div class="flow-step" style="border-color:var(--navy)"><div class="step-label">Completed</div><div class="step-desc">All deliverables done</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- MARKETPLACE FLOW -->
+<!-- ============================================================ -->
+<section class="section" id="flow-marketplace">
+  <h2 class="section-title">&#127979; Campaign Marketplace Flow (Influencer)</h2>
+  <p class="section-subtitle">Influencers discover, apply to, and manage campaign opportunities.</p>
+
+  <div class="card">
+    <div class="card-title">Campaign Discovery &amp; Application</div>
+    <div class="flow-container">
+      <div class="flow">
+        <div class="flow-step"><div class="step-label">Marketplace</div><div class="step-desc">Browse, search, filter campaigns</div></div>
+        <div class="flow-arrow">&#8594;</div>
+        <div class="flow-step"><div class="step-label">Campaign Brief</div><div class="step-desc">Timeline, deliverables, do's/don'ts, requirements</div></div>
+        <div class="flow-arrow">&#8594;</div>
+        <div class="flow-step"><div class="step-label">Apply (Modal)</div><div class="step-desc">Pitch message, proposed rate, screening Q&amp;A</div></div>
+        <div class="flow-arrow">&#8594;</div>
+        <div class="flow-step"><div class="step-label">Application Tracker</div><div class="step-desc">Pending / Accepted / Rejected</div></div>
+        <div class="flow-arrow">&#8594;</div>
+        <div class="flow-step current"><div class="step-label">My Campaigns</div><div class="step-desc">Active, Saved, Completed tabs</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Active Campaign Work (Influencer)</div>
+    <div class="flow-container">
+      <div class="flow">
+        <div class="flow-step current"><div class="step-label">Campaign Detail</div><div class="step-desc">Overview, brief, requirements</div></div>
+        <div class="flow-arrow">&#8594;</div>
+        <div class="flow-step"><div class="step-label">Create Content</div><div class="step-desc">Based on deliverable requirements</div></div>
+        <div class="flow-arrow">&#8594;</div>
+        <div class="flow-step"><div class="step-label">Submit Content</div><div class="step-desc">Upload deliverables form</div></div>
+        <div class="flow-arrow">&#8594;</div>
+        <div class="flow-step"><div class="step-label">Review</div><div class="step-desc">Brand reviews &amp; approves/requests changes</div></div>
+        <div class="flow-arrow">&#8594;</div>
+        <div class="flow-step"><div class="step-label">Payment</div><div class="step-desc">Compensation on approval</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- CREATOR PROFILE FLOW -->
+<!-- ============================================================ -->
+<section class="section" id="flow-profile">
+  <h2 class="section-title">&#128100; Creator Profile Flow</h2>
+  <p class="section-subtitle">Comprehensive 4-tab profile with enrichment pipeline. Viewed by brands from discovery results.</p>
+
+  <div class="card">
+    <div class="card-title">Profile Page Tabs</div>
+    <div class="grid grid-4" style="margin-top:12px">
+      <div style="padding:16px;background:var(--bg);border-radius:12px;border-left:3px solid var(--navy)">
+        <div style="font-weight:700;font-size:13px;color:var(--navy);margin-bottom:6px">Overview</div>
+        <div style="font-size:11px;color:var(--muted);line-height:1.5">Header, Snapshot (4 stats), Insights, Metrics Table, Content Grid, Demographics, Similar Creators, Internal Notes</div>
+      </div>
+      <div style="padding:16px;background:var(--bg);border-radius:12px;border-left:3px solid var(--cyan)">
+        <div style="font-weight:700;font-size:13px;color:var(--navy);margin-bottom:6px">Content</div>
+        <div style="font-size:11px;color:var(--muted);line-height:1.5">All posts with platform/type filters. 4-column thumbnail grid. Clickable posts (open on platform).</div>
+      </div>
+      <div style="padding:16px;background:var(--bg);border-radius:12px;border-left:3px solid var(--success)">
+        <div style="font-weight:700;font-size:13px;color:var(--navy);margin-bottom:6px">Demographics</div>
+        <div style="font-size:11px;color:var(--muted);line-height:1.5">Age distribution bars, gender split bars, geographic cards with flags. "Estimated" badge.</div>
+      </div>
+      <div style="padding:16px;background:var(--bg);border-radius:12px;border-left:3px solid var(--warning)">
+        <div style="font-weight:700;font-size:13px;color:var(--navy);margin-bottom:6px">Analytics</div>
+        <div style="font-size:11px;color:var(--muted);line-height:1.5">Avg Views, Engagement Rate, Growth Rate, Authenticity. Per-platform performance cards.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Data Enrichment Pipeline</div>
+    <div class="flow-container">
+      <div class="flow">
+        <div class="flow-step"><div class="step-label">Click Creator</div><div class="step-desc">From discovery results</div></div>
+        <div class="flow-arrow">&#8594;</div>
+        <div class="flow-step"><div class="step-label">Auto-Save</div><div class="step-desc">Profile saved to Firestore</div></div>
+        <div class="flow-arrow">&#8594;</div>
+        <div class="flow-step"><div class="step-label">Background Enrichment</div><div class="step-desc">8 concurrent Apify methods</div></div>
+        <div class="flow-arrow">&#8594;</div>
+        <div class="flow-step"><div class="step-label">TTL Check</div><div class="step-desc">7-day staleness detection</div></div>
+        <div class="flow-arrow">&#8594;</div>
+        <div class="flow-step current"><div class="step-label">Rich Profile</div><div class="step-desc">Full data: posts, demographics, metrics</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SCREEN MAPS -->
+<!-- ============================================================ -->
+<section class="section" id="screens-auth">
+  <h2 class="section-title">&#128248; Screen Map: Authentication (14 screens)</h2>
+  <p class="section-subtitle">All auth-related pages organized by flow.</p>
+
+  <div class="screen-group">
+    <div class="screen-group-title"><span class="icon">&#128100;</span> Influencer Auth (12 screens)</div>
+    <div class="screen-item"><span class="screen-route">/</span><span class="screen-desc">Role Selection (Influencer vs Brand)</span></div>
+    <div class="screen-item"><span class="screen-route">/auth/influencer/login</span><span class="screen-desc">Login with email/phone + Google, Facebook, Apple OAuth</span></div>
+    <div class="screen-item"><span class="screen-route">/auth/influencer/signup/email</span><span class="screen-desc">Email/password registration form</span></div>
+    <div class="screen-item"><span class="screen-route">/auth/influencer/signup/verify-email</span><span class="screen-desc">Email verification prompt</span></div>
+    <div class="screen-item"><span class="screen-route">/auth/influencer/signup/email-verified</span><span class="screen-desc">Email verified confirmation</span></div>
+    <div class="screen-item"><span class="screen-route">/auth/influencer/verify/social</span><span class="screen-desc">Connect Instagram account</span></div>
+    <div class="screen-item"><span class="screen-route">/auth/influencer/verify/success</span><span class="screen-desc">Social verification success</span></div>
+    <div class="screen-item"><span class="screen-route">/auth/influencer/complete-profile</span><span class="screen-desc">Bio, categories, avatar setup</span></div>
+    <div class="screen-item"><span class="screen-route">/auth/influencer/forgot-password</span><span class="screen-desc">Enter email for reset link</span></div>
+    <div class="screen-item"><span class="screen-route">/auth/influencer/reset-password</span><span class="screen-desc">Set new password</span></div>
+    <div class="screen-item"><span class="screen-route">/auth/influencer/reset-success</span><span class="screen-desc">Password reset confirmation</span></div>
+    <div class="screen-item"><span class="screen-route">/auth/influencer/instagram-welcome</span><span class="screen-desc">Instagram-connected welcome page</span></div>
+  </div>
+
+  <div class="screen-group">
+    <div class="screen-group-title"><span class="icon">&#127970;</span> Brand Auth (11 screens)</div>
+    <div class="screen-item"><span class="screen-route">/auth/brand/login</span><span class="screen-desc">Login with email + social auth</span></div>
+    <div class="screen-item"><span class="screen-route">/auth/brand/signup/email</span><span class="screen-desc">Initial email verification</span></div>
+    <div class="screen-item"><span class="screen-route">/auth/brand/signup/account</span><span class="screen-desc">Step 1/3: Name, email, password (33%)</span></div>
+    <div class="screen-item"><span class="screen-route">/auth/brand/signup/company</span><span class="screen-desc">Step 2/3: Company, industry, size (67%)</span></div>
+    <div class="screen-item"><span class="screen-route">/auth/brand/signup/social</span><span class="screen-desc">Step 3/3: Optional social links (100%)</span></div>
+    <div class="screen-item"><span class="screen-route">/auth/brand/complete-profile</span><span class="screen-desc">Finish brand profile setup</span></div>
+    <div class="screen-item"><span class="screen-route">/auth/brand/forgot-password</span><span class="screen-desc">Enter email for reset</span></div>
+    <div class="screen-item"><span class="screen-route">/auth/brand/reset-password</span><span class="screen-desc">Set new password</span></div>
+    <div class="screen-item"><span class="screen-route">/auth/brand/reset-success</span><span class="screen-desc">Reset confirmation</span></div>
+    <div class="screen-item"><span class="screen-route">/auth/brand/signup/verify-email</span><span class="screen-desc">Email verification page</span></div>
+    <div class="screen-item"><span class="screen-route">/auth/brand/signup/email-verified</span><span class="screen-desc">Email verified success</span></div>
+  </div>
+</section>
+
+<section class="section" id="screens-influencer">
+  <h2 class="section-title">&#128248; Screen Map: Influencer (15 screens)</h2>
+  <div class="screen-group">
+    <div class="screen-group-title"><span class="icon">&#128202;</span> Dashboard &amp; Profile</div>
+    <div class="screen-item"><span class="screen-route">/influencers</span><span class="screen-desc">Home dashboard: stats, recommended campaigns</span></div>
+    <div class="screen-item"><span class="screen-route">/influencers/profile</span><span class="screen-desc">Edit public profile</span></div>
+    <div class="screen-item"><span class="screen-route">/influencers/settings</span><span class="screen-desc">Account settings &amp; preferences</span></div>
+    <div class="screen-item"><span class="screen-route">/influencers/analytics</span><span class="screen-desc">Performance metrics dashboard</span></div>
+    <div class="screen-item"><span class="screen-route">/influencers/calendar</span><span class="screen-desc">Campaign calendar view</span></div>
+    <div class="screen-item"><span class="screen-route">/influencers/notifications</span><span class="screen-desc">Notification center</span></div>
+    <div class="screen-item"><span class="screen-route">/influencers/chats</span><span class="screen-desc">Direct messages</span></div>
+    <div class="screen-item"><span class="screen-route">/influencers/invitations</span><span class="screen-desc">Campaign invitations from brands</span></div>
+  </div>
+  <div class="screen-group">
+    <div class="screen-group-title"><span class="icon">&#128188;</span> Campaigns &amp; Marketplace</div>
+    <div class="screen-item"><span class="screen-route">/influencers/campaigns</span><span class="screen-desc">My campaigns (Active, Applications, Saved, Completed, Schedule tabs)</span></div>
+    <div class="screen-item"><span class="screen-route">/influencers/campaigns/[id]</span><span class="screen-desc">Campaign detail: overview, content, brief, payments, analytics</span></div>
+    <div class="screen-item"><span class="screen-route">/influencers/campaigns/[id]/submit-content</span><span class="screen-desc">Submit deliverables form</span></div>
+    <div class="screen-item"><span class="screen-route">/influencers/marketplace</span><span class="screen-desc">Campaign marketplace: browse, filter, search</span></div>
+    <div class="screen-item"><span class="screen-route">/influencers/marketplace/[id]</span><span class="screen-desc">Campaign brief: timeline, deliverables, Apply Now</span></div>
+    <div class="screen-item"><span class="screen-route">/influencers/marketplace/search</span><span class="screen-desc">Advanced marketplace search results</span></div>
+    <div class="screen-item"><span class="screen-route">/influencers/campaign-applications</span><span class="screen-desc">Application tracker: status, stats</span></div>
+  </div>
+</section>
+
+<section class="section" id="screens-brand">
+  <h2 class="section-title">&#128248; Screen Map: Brand (15 screens)</h2>
+  <div class="screen-group">
+    <div class="screen-group-title"><span class="icon">&#128202;</span> Dashboard &amp; Management</div>
+    <div class="screen-item"><span class="screen-route">/brands/dashboard</span><span class="screen-desc">Main dashboard: stats, pending actions, recent campaigns, recommended creators</span></div>
+    <div class="screen-item"><span class="screen-route">/brands/profile</span><span class="screen-desc">Edit company info, branding, social links</span></div>
+    <div class="screen-item"><span class="screen-route">/brands/settings</span><span class="screen-desc">Account settings</span></div>
+    <div class="screen-item"><span class="screen-route">/brands/notifications</span><span class="screen-desc">Notification center</span></div>
+    <div class="screen-item"><span class="screen-route">/brands/messages</span><span class="screen-desc">Chat with influencers</span></div>
+    <div class="screen-item"><span class="screen-route">/brands/analytics</span><span class="screen-desc">Campaign analytics &amp; ROI</span></div>
+    <div class="screen-item"><span class="screen-route">/brands/applications</span><span class="screen-desc">View creator applications</span></div>
+  </div>
+  <div class="screen-group">
+    <div class="screen-group-title"><span class="icon">&#128269;</span> Discovery &amp; Creators</div>
+    <div class="screen-item"><span class="screen-route">/brands/discover</span><span class="screen-desc">Creator discovery: platform selector, search, filters, live toggle</span></div>
+    <div class="screen-item"><span class="screen-route">/brands/discover/results</span><span class="screen-desc">Search results: hybrid source, filtering, enrichment</span></div>
+    <div class="screen-item"><span class="screen-route">/brands/influencers</span><span class="screen-desc">My Creators: Creators list, Lists, Suggestions tabs</span></div>
+    <div class="screen-item"><span class="screen-route">/brands/influencers/[id]</span><span class="screen-desc">Creator profile: 4 tabs with enrichment + notes</span></div>
+  </div>
+  <div class="screen-group">
+    <div class="screen-group-title"><span class="icon">&#128188;</span> Campaigns</div>
+    <div class="screen-item"><span class="screen-route">/brands/campaigns</span><span class="screen-desc">Campaign list: filters by status, date, brand</span></div>
+    <div class="screen-item"><span class="screen-route">/brands/campaigns/create</span><span class="screen-desc">6-step campaign creation wizard</span></div>
+    <div class="screen-item"><span class="screen-route">/brands/campaigns/[id]/dashboard</span><span class="screen-desc">Campaign dashboard: Overview, Creators, Content, Analytics</span></div>
+    <div class="screen-item"><span class="screen-route">/brands/campaigns/[id]/edit</span><span class="screen-desc">Edit campaign details</span></div>
+  </div>
+</section>
+
+<section class="section" id="screens-campaign">
+  <h2 class="section-title">&#128248; Screen Map: Utility &amp; Legal (5 screens)</h2>
+  <div class="screen-group">
+    <div class="screen-item"><span class="screen-route">/privacy</span><span class="screen-desc">Privacy Policy</span></div>
+    <div class="screen-item"><span class="screen-route">/terms</span><span class="screen-desc">Terms of Service</span></div>
+    <div class="screen-item"><span class="screen-route">/unauthorized</span><span class="screen-desc">403 error page with role-aware redirect</span></div>
+    <div class="screen-item"><span class="screen-route">/data-deletion</span><span class="screen-desc">GDPR data deletion request</span></div>
+    <div class="screen-item"><span class="screen-route">/apply/[campaignId]</span><span class="screen-desc">Shared campaign link handler</span></div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- COMPONENT DUPLICATES -->
+<!-- ============================================================ -->
+<section class="section" id="comp-duplicates">
+  <h2 class="section-title">&#9888;&#65039; Duplicate Components (37 overlapping)</h2>
+  <p class="section-subtitle">Components that do the same thing in multiple locations. Each group should be consolidated into a single reusable component.</p>
+
+  <div class="table-wrap">
+    <table>
+      <tr><th>Group</th><th>Count</th><th>Current Files</th><th>Should Be</th></tr>
+      <tr>
+        <td><strong>Buttons</strong></td><td><span class="status status-bad">6</span></td>
+        <td style="font-size:11px">ui/Button, auth/PrimaryButton, auth/OutlineButton, ui/CampaignPrimaryButton, ui/SecondaryOutlinedButton, ui/TertiaryCampaignButton</td>
+        <td style="font-size:11px;color:var(--success)">1 unified <code>Button</code> with variants (primary, secondary, outline, danger, ghost) + sizes (sm, md, lg) + shapes (default, pill)</td>
+      </tr>
+      <tr>
+        <td><strong>Select/Dropdown</strong></td><td><span class="status status-bad">6</span></td>
+        <td style="font-size:11px">auth/SelectField, auth/CustomSelectField, auth/StyledSelect, campaigns/CampaignSelectField, discover/FilterDropdown, influencers/SortDropdown</td>
+        <td style="font-size:11px;color:var(--success)">1 <code>Select</code> component + 1 <code>Dropdown</code> for custom menus</td>
+      </tr>
+      <tr>
+        <td><strong>Campaign Cards</strong></td><td><span class="status status-bad">7</span></td>
+        <td style="font-size:11px">campaigns/CampaignCard, ui/CampaignCard, ui/MarketPlaceCampaignCard, influencers/marketplace/MarketplaceCampaignCard, campaigns/CampaignListCard, campaigns/CampaignTile, influencers/CampaignMarketplaceCard</td>
+        <td style="font-size:11px;color:var(--success)">2 cards: <code>ActiveCampaignCard</code> + <code>MarketplaceCampaignCard</code></td>
+      </tr>
+      <tr>
+        <td><strong>Creator Cards</strong></td><td><span class="status status-warn">4</span></td>
+        <td style="font-size:11px">discover/InfluencerCard, brands/discover/RecommendedCreatorCard, campaigns/RecommendedCreatorCard (duplicate!), campaigns/ApplicantCard</td>
+        <td style="font-size:11px;color:var(--success)">1 <code>CreatorCard</code> with variants (compact, detailed, applicant)</td>
+      </tr>
+      <tr>
+        <td><strong>Filter Sidebars</strong></td><td><span class="status status-warn">4</span></td>
+        <td style="font-size:11px">filters/FilterSidebar, discovery/filters/FilterSidebar, influencers/FilterSidebar, influencers/marketplace/CampaignFilterSidebar</td>
+        <td style="font-size:11px;color:var(--success)">1 <code>FilterPanel</code> with composable filter groups</td>
+      </tr>
+      <tr>
+        <td><strong>Modals</strong></td><td><span class="status status-warn">17</span></td>
+        <td style="font-size:11px">17 modal implementations, most not using base Modal.tsx</td>
+        <td style="font-size:11px;color:var(--success)">All wrap base <code>Modal</code> component for consistent accessibility &amp; styling</td>
+      </tr>
+      <tr>
+        <td><strong>Headers</strong></td><td><span class="status status-warn">3</span></td>
+        <td style="font-size:11px">Header.tsx, campaigns/UserProfileHeader, influencers/UserProfileHeader (duplicate!), 2x DiscoveryHeader</td>
+        <td style="font-size:11px;color:var(--success)">1 <code>TopBar</code> + 1 <code>PageHeader</code></td>
+      </tr>
+    </table>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- COMPONENT INVENTORY -->
+<!-- ============================================================ -->
+<section class="section" id="comp-inventory">
+  <h2 class="section-title">&#128230; Component Inventory (250+ components)</h2>
+  <p class="section-subtitle">Full inventory organized by directory. Click to expand each group.</p>
+
+  <details>
+    <summary>&#128296; UI Core (20+ components) <span class="status status-good">Base layer</span></summary>
+    <div class="detail-content">
+      <div class="comp-item"><span class="comp-name">Button</span><span class="comp-desc">5 variants, 3 sizes, 2 shapes, icon + loading support</span><span class="status status-good">&#10003; Unified</span></div>
+      <div class="comp-item"><span class="comp-name">Modal + ModalBody + ModalFooter</span><span class="comp-desc">Accessible dialog with focus trap, Escape key, backdrop click, 5 sizes</span><span class="status status-good">&#10003; Accessible</span></div>
+      <div class="comp-item"><span class="comp-name">Toast + ToastContainer</span><span class="comp-desc">Success/error/warning/info notifications</span><span class="status status-good">&#10003; Good</span></div>
+      <div class="comp-item"><span class="comp-name">TabsNavigation</span><span class="comp-desc">Tab bar navigation</span><span class="status status-good">&#10003; Good</span></div>
+      <div class="comp-item"><span class="comp-name">PaginationBar</span><span class="comp-desc">Pagination with prev/next, page numbers</span><span class="status status-good">&#10003; Good</span></div>
+      <div class="comp-item"><span class="comp-name">Tag</span><span class="comp-desc">Tag/badge display</span><span class="status status-good">&#10003; Good</span></div>
+      <div class="comp-item"><span class="comp-name">Skeleton, SkeletonGrid</span><span class="comp-desc">Loading placeholders (box, circle, text)</span><span class="status status-good">&#10003; Good</span></div>
+      <div class="comp-item"><span class="comp-name">PageLoader, SectionLoader</span><span class="comp-desc">Spinning loaders with aria-label</span><span class="status status-good">&#10003; Accessible</span></div>
+      <div class="comp-item"><span class="comp-name">NotificationBell</span><span class="comp-desc">Bell icon with count badge, dropdown panel</span><span class="status status-good">&#10003; Accessible</span></div>
+      <div class="comp-item"><span class="comp-name">CampaignPrimaryButton</span><span class="comp-desc">Campaign-specific button</span><span class="status status-warn">Duplicate</span></div>
+      <div class="comp-item"><span class="comp-name">SecondaryOutlinedButton</span><span class="comp-desc">Outline button</span><span class="status status-warn">Duplicate</span></div>
+      <div class="comp-item"><span class="comp-name">TertiaryCampaignButton</span><span class="comp-desc">Tertiary button</span><span class="status status-warn">Duplicate</span></div>
+    </div>
+  </details>
+
+  <details>
+    <summary>&#128274; Auth Components (40+) <span class="status status-good">Complete</span></summary>
+    <div class="detail-content">
+      <div class="comp-item"><span class="comp-name">AuthLayout, AuthCard, Logo</span><span class="comp-desc">Layout wrappers with branding</span><span class="status status-good">&#10003;</span></div>
+      <div class="comp-item"><span class="comp-name">InputField, PasswordInputField</span><span class="comp-desc">Text/password inputs with icons</span><span class="status status-good">&#10003;</span></div>
+      <div class="comp-item"><span class="comp-name">PhoneNumberInput</span><span class="comp-desc">Phone with country code selector</span><span class="status status-good">&#10003;</span></div>
+      <div class="comp-item"><span class="comp-name">OTPInput</span><span class="comp-desc">6-digit code with auto-focus &amp; paste</span><span class="status status-warn">Missing label</span></div>
+      <div class="comp-item"><span class="comp-name">PrimaryButton, OutlineButton</span><span class="comp-desc">Auth-specific buttons</span><span class="status status-warn">Duplicate</span></div>
+      <div class="comp-item"><span class="comp-name">SocialAuthButton</span><span class="comp-desc">Google, Facebook, Apple, Instagram</span><span class="status status-good">&#10003;</span></div>
+      <div class="comp-item"><span class="comp-name">ProgressDots, LinearProgressBar</span><span class="comp-desc">Step indicators (influencer dots, brand progress bar)</span><span class="status status-good">&#10003;</span></div>
+      <div class="comp-item"><span class="comp-name">EmailVerificationGuard</span><span class="comp-desc">Route guard for email verification</span><span class="status status-good">&#10003;</span></div>
+      <div class="comp-item"><span class="comp-name">ProfileCompletionGuard</span><span class="comp-desc">Route guard for profile completion</span><span class="status status-good">&#10003;</span></div>
+      <div class="comp-item"><span class="comp-name">SelectField, CustomSelectField, StyledSelect</span><span class="comp-desc">3 select variants</span><span class="status status-bad">3 duplicates</span></div>
+    </div>
+  </details>
+
+  <details>
+    <summary>&#128188; Campaign Components (60+) <span class="status status-warn">Heavy duplication</span></summary>
+    <div class="detail-content">
+      <div class="comp-item"><span class="comp-name">6-Step Creation Wizard</span><span class="comp-desc">Step1Details through Step6Review + PublishConfirmDialog</span><span class="status status-good">&#10003;</span></div>
+      <div class="comp-item"><span class="comp-name">Campaign Dashboard Tabs</span><span class="comp-desc">OverviewTab, InfluencersTabContent, ContentTabContent, ReportTabContent</span><span class="status status-good">&#10003;</span></div>
+      <div class="comp-item"><span class="comp-name">7 Campaign Card Variants</span><span class="comp-desc">CampaignCard, CampaignListCard, CampaignTile, MarketPlaceCampaignCard, etc.</span><span class="status status-bad">Consolidate to 2</span></div>
+      <div class="comp-item"><span class="comp-name">8+ Modals</span><span class="comp-desc">Brief, Invite, Share, Selection, Review, Deliverables, etc.</span><span class="status status-warn">Should wrap base Modal</span></div>
+      <div class="comp-item"><span class="comp-name">CampaignInputField</span><span class="comp-desc">Duplicate of auth/InputField</span><span class="status status-bad">Remove</span></div>
+      <div class="comp-item"><span class="comp-name">Sidebar</span><span class="comp-desc">Campaign-specific navigation</span><span class="status status-warn">Should share base with InfluencerSidebar</span></div>
+    </div>
+  </details>
+
+  <details>
+    <summary>&#128269; Discovery Components (15+) <span class="status status-good">Good architecture</span></summary>
+    <div class="detail-content">
+      <div class="comp-item"><span class="comp-name">DiscoveryHeader</span><span class="comp-desc">Platform selector, search, filters</span><span class="status status-warn">Exists in 2 locations</span></div>
+      <div class="comp-item"><span class="comp-name">ResultsGrid, ResultsHeader</span><span class="comp-desc">Search result display</span><span class="status status-good">&#10003;</span></div>
+      <div class="comp-item"><span class="comp-name">TopTopicsSection, TopicCard</span><span class="comp-desc">Trending topics</span><span class="status status-good">&#10003;</span></div>
+      <div class="comp-item"><span class="comp-name">AIDiscoverySection</span><span class="comp-desc">AI-powered recommendations</span><span class="status status-good">&#10003;</span></div>
+      <div class="comp-item"><span class="comp-name">Filter components</span><span class="comp-desc">FilterSidebar, FilterGroup, FilterDropdown</span><span class="status status-warn">Duplicate sidebars</span></div>
+    </div>
+  </details>
+
+  <details>
+    <summary>&#128100; Profile Components (17+) <span class="status status-good">Well-designed</span></summary>
+    <div class="detail-content">
+      <div class="comp-item"><span class="comp-name">ProfileHeader</span><span class="comp-desc">Avatar, name, bio, verified badge, actions</span><span class="status status-good">&#10003;</span></div>
+      <div class="comp-item"><span class="comp-name">ProfileSnapshot</span><span class="comp-desc">4 stat cards (followers, engagement, influence, posts)</span><span class="status status-good">&#10003;</span></div>
+      <div class="comp-item"><span class="comp-name">InsightsCard</span><span class="comp-desc">Best time, top hashtag, sentiment</span><span class="status status-good">&#10003;</span></div>
+      <div class="comp-item"><span class="comp-name">MetricsTable</span><span class="comp-desc">Platform breakdown</span><span class="status status-good">&#10003;</span></div>
+      <div class="comp-item"><span class="comp-name">ContentGrid</span><span class="comp-desc">4-column post thumbnails with hover</span><span class="status status-good">&#10003;</span></div>
+      <div class="comp-item"><span class="comp-name">DemographicsSection</span><span class="comp-desc">Age, gender, geography with "Estimated" badge</span><span class="status status-good">&#10003;</span></div>
+      <div class="comp-item"><span class="comp-name">SimilarCreators</span><span class="comp-desc">Similar creator recommendations</span><span class="status status-good">&#10003;</span></div>
+      <div class="comp-item"><span class="comp-name">EnrichmentBanner</span><span class="comp-desc">Stale data banner with refresh</span><span class="status status-good">&#10003;</span></div>
+      <div class="comp-item"><span class="comp-name">InternalNotes</span><span class="comp-desc">Brand notes with add form</span><span class="status status-good">&#10003;</span></div>
+    </div>
+  </details>
+</section>
+
+<!-- ============================================================ -->
+<!-- CONSOLIDATION MAP -->
+<!-- ============================================================ -->
+<section class="section" id="comp-consolidation">
+  <h2 class="section-title">&#128297; Component Consolidation Map</h2>
+  <p class="section-subtitle">What exists now &rarr; what it should become.</p>
+
+  <div class="compare">
+    <div class="compare-box current-box">
+      <div class="compare-label current-label">CURRENT: 6 Button Components</div>
+      <div style="font-size:12px;line-height:2">
+        <div>ui/Button.tsx <span class="status status-good">Keep</span></div>
+        <div>auth/PrimaryButton.tsx <span class="status status-bad">Remove</span></div>
+        <div>auth/OutlineButton.tsx <span class="status status-bad">Remove</span></div>
+        <div>ui/CampaignPrimaryButton.tsx <span class="status status-bad">Remove</span></div>
+        <div>ui/SecondaryOutlinedButton.tsx <span class="status status-bad">Remove</span></div>
+        <div>ui/TertiaryCampaignButton.tsx <span class="status status-bad">Remove</span></div>
+      </div>
+    </div>
+    <div class="compare-arrow">&#10132;</div>
+    <div class="compare-box proposed-box">
+      <div class="compare-label proposed-label">PROPOSED: 1 Button Component</div>
+      <div style="font-size:12px;line-height:2">
+        <div><code>&lt;Button variant="primary"&gt;</code></div>
+        <div><code>&lt;Button variant="secondary"&gt;</code></div>
+        <div><code>&lt;Button variant="outline"&gt;</code></div>
+        <div><code>&lt;Button variant="danger"&gt;</code></div>
+        <div><code>&lt;Button variant="ghost"&gt;</code></div>
+        <div><code>&lt;Button shape="pill"&gt;</code> (for auth)</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="compare">
+    <div class="compare-box current-box">
+      <div class="compare-label current-label">CURRENT: 7 Campaign Cards</div>
+      <div style="font-size:12px;line-height:1.8">7 separate implementations with different props, styles, and layouts</div>
+    </div>
+    <div class="compare-arrow">&#10132;</div>
+    <div class="compare-box proposed-box">
+      <div class="compare-label proposed-label">PROPOSED: 2 Campaign Cards</div>
+      <div style="font-size:12px;line-height:1.8">
+        <div><code>ActiveCampaignCard</code> &mdash; progress, deliverables, status</div>
+        <div><code>MarketplaceCampaignCard</code> &mdash; budget, deadline, category, apply</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="compare">
+    <div class="compare-box current-box">
+      <div class="compare-label current-label">CURRENT: 17 Modal Implementations</div>
+      <div style="font-size:12px;line-height:1.8">Each re-implements backdrop, close button, sizing, keyboard handling</div>
+    </div>
+    <div class="compare-arrow">&#10132;</div>
+    <div class="compare-box proposed-box">
+      <div class="compare-label proposed-label">PROPOSED: 1 Base + Wrappers</div>
+      <div style="font-size:12px;line-height:1.8">
+        <div>Base <code>Modal</code> handles: a11y, focus trap, backdrop, sizing</div>
+        <div>Each dialog wraps Modal with its specific content</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- MISSING UX PATTERNS -->
+<!-- ============================================================ -->
+<section class="section" id="missing-ux">
+  <h2 class="section-title">&#10060; Missing UX Patterns</h2>
+  <p class="section-subtitle">Standard web app patterns that are not yet implemented.</p>
+
+  <div class="grid grid-2">
+    <div class="card" style="border-left:4px solid var(--error)">
+      <div class="card-title">&#10060; Error Boundaries</div>
+      <div class="card-subtitle">No <code>error.tsx</code> files. No custom ErrorBoundary components. App crashes show default Next.js error page.</div>
+      <div class="status status-bad">Not Implemented</div>
+    </div>
+    <div class="card" style="border-left:4px solid var(--error)">
+      <div class="card-title">&#10060; 404 / Not Found Pages</div>
+      <div class="card-subtitle">No <code>not-found.tsx</code> files. Broken links show default Next.js 404.</div>
+      <div class="status status-bad">Not Implemented</div>
+    </div>
+    <div class="card" style="border-left:4px solid var(--error)">
+      <div class="card-title">&#10060; Empty States</div>
+      <div class="card-subtitle">No dedicated empty state components. No illustrations or CTAs when lists are empty.</div>
+      <div class="status status-bad">Minimal</div>
+    </div>
+    <div class="card" style="border-left:4px solid var(--error)">
+      <div class="card-title">&#10060; Breadcrumbs</div>
+      <div class="card-subtitle">Nested routes (campaigns/[id]/dashboard) have no breadcrumb trail. Users can't easily navigate back.</div>
+      <div class="status status-bad">Not Implemented</div>
+    </div>
+    <div class="card" style="border-left:4px solid var(--warning)">
+      <div class="card-title">&#9888;&#65039; Confirmation Dialogs</div>
+      <div class="card-subtitle">No reusable ConfirmDialog component. Only PublishConfirmDialog exists. Missing for: delete list, remove profile, reject application.</div>
+      <div class="status status-warn">Partial</div>
+    </div>
+    <div class="card" style="border-left:4px solid var(--warning)">
+      <div class="card-title">&#9888;&#65039; Form Validation</div>
+      <div class="card-subtitle">Inconsistent patterns. Auth forms use error props. Campaign forms use inline state. No validation library (zod/yup).</div>
+      <div class="status status-warn">Inconsistent</div>
+    </div>
+    <div class="card" style="border-left:4px solid var(--warning)">
+      <div class="card-title">&#9888;&#65039; Loading Skeletons</div>
+      <div class="card-subtitle">Skeleton components exist but not all data-fetching pages use them. No skeleton for modals.</div>
+      <div class="status status-warn">Partial</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- ACCESSIBILITY -->
+<!-- ============================================================ -->
+<section class="section" id="accessibility">
+  <h2 class="section-title">&#9855; Accessibility Gaps</h2>
+  <p class="section-subtitle">WCAG compliance issues and improvements needed.</p>
+
+  <div class="grid grid-2">
+    <div class="card">
+      <div class="card-title" style="color:var(--success)">&#10003; Already Fixed (this session)</div>
+      <ul style="font-size:13px;line-height:2;margin-left:16px">
+        <li>Modal: <code>role="dialog"</code>, <code>aria-modal</code>, focus trap</li>
+        <li>Loaders: <code>role="status"</code>, <code>aria-label</code></li>
+        <li>NotificationBell: <code>aria-expanded</code>, <code>aria-haspopup</code></li>
+        <li>VisibilitySelector: <code>role="radiogroup"</code> + keyboard nav</li>
+        <li>3 modals: proper dialog roles + labelling</li>
+        <li>DiscoveryHeader: <code>sr-only</code> instead of <code>hidden</code></li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-title" style="color:var(--error)">&#10060; Still Needs Work</div>
+      <ul style="font-size:13px;line-height:2;margin-left:16px">
+        <li>No <code>&lt;main&gt;</code>, <code>&lt;nav&gt;</code>, <code>&lt;header&gt;</code> landmarks</li>
+        <li>No skip-to-content link</li>
+        <li>OTPInput: missing semantic <code>&lt;label&gt;</code></li>
+        <li>Clickable divs (InfluencerCard, CampaignCard): should be buttons</li>
+        <li>Sidebar: uses <code>&lt;div&gt;</code> instead of <code>&lt;nav&gt;</code></li>
+        <li>Color contrast audit not performed</li>
+        <li>Remaining 14 modals not wrapping base Modal</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- BEST PRACTICES -->
+<!-- ============================================================ -->
+<section class="section" id="best-practices">
+  <h2 class="section-title">&#128161; Best Practice Improvements</h2>
+  <p class="section-subtitle">Code quality and architecture recommendations.</p>
+
+  <div class="improvement high">
+    <div class="improvement-title">Consolidate Auth Contexts</div>
+    <div class="improvement-desc">Two auth context paths (<code>/lib/firebase/auth-context.tsx</code> and <code>/lib/context/AuthContext.tsx</code>) create confusion. Consolidate to one. Remove deprecated mock context.</div>
+  </div>
+  <div class="improvement high">
+    <div class="improvement-title">Server-Side Auth Middleware</div>
+    <div class="improvement-desc">Replace <code>x-user-id</code> header with Firebase ID token validation. Add Next.js middleware for protected routes.</div>
+  </div>
+  <div class="improvement medium">
+    <div class="improvement-title">Form Validation Library</div>
+    <div class="improvement-desc">Adopt Zod for schema validation across all forms. Replace inconsistent inline validation in campaign creation steps.</div>
+  </div>
+  <div class="improvement medium">
+    <div class="improvement-title">Semantic HTML</div>
+    <div class="improvement-desc">Replace <code>&lt;div&gt;</code> wrappers with <code>&lt;main&gt;</code>, <code>&lt;nav&gt;</code>, <code>&lt;header&gt;</code>, <code>&lt;article&gt;</code> landmarks. Add skip-to-content link.</div>
+  </div>
+  <div class="improvement medium">
+    <div class="improvement-title">Consistent Loading States</div>
+    <div class="improvement-desc">Every data-fetching page should use Skeleton components. Add loading.tsx files in app directories for automatic Next.js suspense boundaries.</div>
+  </div>
+  <div class="improvement low">
+    <div class="improvement-title">Remove Dead Code</div>
+    <div class="improvement-desc">Delete <code>RoleCard copy.tsx</code>, <code>page_old.tsx</code> files, <code>mock-auth-context.tsx</code>. Consolidate duplicate DiscoveryHeader and UserProfileHeader.</div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- PRIORITY ROADMAP -->
+<!-- ============================================================ -->
+<section class="section" id="priorities">
+  <h2 class="section-title">&#128640; Priority Roadmap</h2>
+  <p class="section-subtitle">Phased execution plan for all improvements.</p>
+
+  <div class="card" style="border-left:4px solid var(--error)">
+    <div class="card-title">Phase 1: Critical Fixes (Week 1)</div>
+    <div style="font-size:13px;line-height:2.2;margin-left:16px">
+      <div>&#9744; Add <code>error.tsx</code> and <code>not-found.tsx</code> to all route groups</div>
+      <div>&#9744; Create reusable <code>EmptyState</code> component</div>
+      <div>&#9744; Create reusable <code>ConfirmDialog</code> component</div>
+      <div>&#9744; Add semantic HTML landmarks across all layouts</div>
+      <div>&#9744; Consolidate auth contexts into one</div>
+    </div>
+  </div>
+
+  <div class="card" style="border-left:4px solid var(--warning)">
+    <div class="card-title">Phase 2: Component Consolidation (Weeks 2-3)</div>
+    <div style="font-size:13px;line-height:2.2;margin-left:16px">
+      <div>&#9744; Migrate all auth buttons to use <code>ui/Button</code></div>
+      <div>&#9744; Consolidate 6 select implementations &rarr; 1</div>
+      <div>&#9744; Consolidate 7 campaign cards &rarr; 2</div>
+      <div>&#9744; Wrap all 14 remaining modals with base <code>Modal</code></div>
+      <div>&#9744; Consolidate 4 filter sidebars &rarr; 1</div>
+      <div>&#9744; Remove duplicate files (RoleCard copy, page_old, etc.)</div>
+    </div>
+  </div>
+
+  <div class="card" style="border-left:4px solid var(--info)">
+    <div class="card-title">Phase 3: UX Enhancement (Weeks 3-4)</div>
+    <div style="font-size:13px;line-height:2.2;margin-left:16px">
+      <div>&#9744; Add Breadcrumbs component for nested routes</div>
+      <div>&#9744; Implement Zod form validation across campaign creation</div>
+      <div>&#9744; Add loading.tsx suspense boundaries to all data routes</div>
+      <div>&#9744; Accessibility audit: color contrast, skip links, sr-only</div>
+      <div>&#9744; Add server-side auth middleware</div>
+    </div>
+  </div>
+
+  <div class="card" style="border-left:4px solid var(--success)">
+    <div class="card-title">Phase 4: TikTok-Style Discovery (Weeks 4-6)</div>
+    <div style="font-size:13px;line-height:2.2;margin-left:16px">
+      <div>&#9744; Design content feed UI in Figma (vertical scroll, overlay, actions)</div>
+      <div>&#9744; Build content indexing in Firestore (top posts by niche/engagement)</div>
+      <div>&#9744; Create <code>ContentFeed</code> component with video autoplay</div>
+      <div>&#9744; Create <code>CreatorQuickProfile</code> slide-up panel</div>
+      <div>&#9744; Create <code>ContentEngagementOverlay</code> with action sidebar</div>
+      <div>&#9744; Add view mode toggle (Grid / Feed / List) to discovery page</div>
+      <div>&#9744; Implement feed algorithm (relevance + brand preferences)</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- FOOTER -->
+<!-- ============================================================ -->
+<footer style="text-align:center;padding:40px 0;color:var(--muted);font-size:12px;border-top:1px solid var(--border)">
+  <p>HeyCreator UI Audit &bull; Generated March 2026 &bull; 68 screens &bull; 250+ components &bull; Next.js 14 + TypeScript + Tailwind CSS</p>
+</footer>
+
+</main>
+
+<script>
+// Highlight active nav link on scroll
+const sections = document.querySelectorAll('.section');
+const navLinks = document.querySelectorAll('.nav-link');
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(section => {
+    const sectionTop = section.offsetTop;
+    if (scrollY >= sectionTop - 100) current = section.getAttribute('id');
+  });
+  navLinks.forEach(link => {
+    link.classList.remove('active');
+    if (link.getAttribute('href') === '#' + current) link.classList.add('active');
+  });
+});
+// Smooth scroll
+navLinks.forEach(link => {
+  link.addEventListener('click', e => {
+    e.preventDefault();
+    const target = document.querySelector(link.getAttribute('href'));
+    if (target) target.scrollIntoView({ behavior: 'smooth' });
+  });
+});
+</script>
+</body>
+</html>

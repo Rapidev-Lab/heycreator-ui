@@ -1,0 +1,85 @@
+.container {
+  display: flex;
+  flex-direction: column;
+}
+
+.label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #000000;
+  margin-bottom: 8px;
+}
+
+.selectWrapper {
+  position: relative;
+}
+
+.select {
+  width: 100%;
+  height: 50px;
+  padding: 12px 40px 12px 16px;
+  display: flex;
+  align-items: center;
+  border-radius: 10px;
+  border: 1px solid #E0E0E0;
+  background: #F8F9FD;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  font-size: 1rem;
+  color: #001F54; /* brand-navy */
+}
+
+.select:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.arrow {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  width: 12px;
+  height: 8px;
+}
+
+/* Variant A: default (matches current design) */
+.selectA {
+  /* inherits .select */
+}
+
+/* Variant B: pill style with lighter border and subtle shadow */
+.selectB {
+  border-radius: 999px;
+  padding-left: 18px;
+  padding-right: 44px;
+  background: #FFFFFF;
+  border: 1px solid #E6E6F0;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+  color: #001F54; /* brand-navy */
+}
+
+/* Variant C: compact outlined with left icon area */
+.selectC {
+  border-radius: 10px;
+  padding-left: 44px; /* room for left icon */
+  padding-right: 40px;
+  background: #F8F9FD;
+  border: 1px solid #D9D9E0;
+}
+
+.leftIcon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  pointer-events: none;
+  color: #636E9A;
+}

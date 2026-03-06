@@ -1,0 +1,48 @@
+#!/bin/sh
+
+# Git Flow: Enforce commit message format
+# Format: <type>: <message>
+# Types: feat, fix, chore, docs, refactor, test
+# Example: feat: add login screen
+
+commit_message=$(cat "$1")
+
+# Check if commit message follows the required format
+if ! echo "$commit_message" | grep -qE "^(feat|fix|chore|docs|refactor|test): .+$"; then
+    echo ""
+    echo "ERROR: Commit message does not follow required format"
+    echo ""
+    echo "Required format: <type>: <message>"
+    echo ""
+    echo "Allowed types:"
+    echo "  feat     - new feature"
+    echo "  fix      - bug fix"
+    echo "  chore    - maintenance tasks"
+    echo "  docs     - documentation changes"
+    echo "  refactor - code refactoring"
+    echo "  test     - adding or updating tests"
+    echo ""
+    echo "Valid examples:"
+    echo "  feat: add login screen"
+    echo "  fix: resolve authentication bug"
+    echo "  chore: update dependencies"
+    echo ""
+    echo "Your message: \"$commit_message\""
+    echo ""
+    exit 1
+fi
+
+# Check if message is lowercase (except for proper nouns)
+if echo "$commit_message" | grep -qE "^[a-z]+: [A-Z]"; then
+    echo ""
+    echo "ERROR: Commit message should use lowercase"
+    echo ""
+    echo "Incorrect: fix: Authentication bug"
+    echo "Correct:   fix: authentication bug"
+    echo ""
+    echo "Your message: \"$commit_message\""
+    echo ""
+    exit 1
+fi
+
+echo "Commit message format validated successfully"
