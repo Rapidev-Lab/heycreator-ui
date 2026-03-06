@@ -9,6 +9,8 @@ import { mockWorkspaceMembers } from './workspace-members';
 import { mockSubscriptions } from './subscriptions';
 import { mockInvoices } from './invoices';
 import { mockPaymentMethods } from './payment-methods';
+import { mockTeamInvitations } from './team-invitations';
+import { mockSharedLinks } from './shared-links';
 
 /**
  * Populate all collections in a MockFirestore instance.
@@ -123,6 +125,16 @@ export function seedMockData(db: MockFirestore): void {
     db._getCollection('payment_methods').set(pm.id, pm.data);
   }
 
+  // Team invitations
+  for (const inv of mockTeamInvitations) {
+    db._getCollection('team_invitations').set(inv.id, inv);
+  }
+
+  // Shared links
+  for (const sl of mockSharedLinks) {
+    db._getCollection('shared_links').set(sl.id, sl);
+  }
+
   // Profile dedup locks (empty — will be populated by profile creation flows)
   // No seed data needed.
 
@@ -133,6 +145,7 @@ export function seedMockData(db: MockFirestore): void {
     'user_collections', 'notifications',
     'workspaces', 'workspace_members',
     'subscriptions', 'invoices', 'payment_methods',
+    'team_invitations', 'shared_links',
   ];
   for (const name of seededCollections) {
     db._markDirty(name);

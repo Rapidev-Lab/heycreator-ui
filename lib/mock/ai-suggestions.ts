@@ -225,53 +225,64 @@ export async function predictChurn(lastActivityDate: string): Promise<ChurnAlert
 
 // ===== SPRINT 3: TEAM =====
 
+/** Return type for suggestRole — exported for consumers. */
 export interface RoleSuggestion {
   suggestedRole: 'admin' | 'editor' | 'viewer';
-  reason: string;
   confidence: number;
+  reasoning: string;
+  /** Alias for `reasoning` — kept for backward compatibility */
+  reason: string;
 }
 
 /**
- * Suggest a role for a new team member based on email and context.
- * AI Feature: Smart Role Suggestion
+ * Smart Role Suggestion — suggests a workspace role based on email and job title patterns.
+ * B-TEAM feature: AI suggests role when inviting a team member.
  */
-export async function suggestRole(email: string): Promise<RoleSuggestion> {
-  await aiDelay();
+export async function suggestRole(email: string, jobTitle?: string): Promise<RoleSuggestion> {
+  await new Promise(resolve => setTimeout(resolve, 400)); // simulate API delay
 
-  const lowerEmail = email.toLowerCase();
+  const emailLower = email.toLowerCase();
+  const titleLower = (jobTitle || '').toLowerCase();
 
-  // CEO/executive patterns → Admin
-  if (/\b(ceo|cto|cfo|coo|founder|director|head|vp|chief)\b/.test(lowerEmail)) {
+  // CEO, founder, director → Admin
+  if (/ceo|founder|director|cto|coo|vp|head|chief/.test(titleLower) ||
+      /ceo@|founder@|director@/.test(emailLower)) {
     return {
       suggestedRole: 'admin',
-      reason: 'Executive role detected — full workspace management access recommended.',
       confidence: 0.85,
+      reasoning: 'Senior leadership roles typically need full workspace access',
+      reason: 'Senior leadership roles typically need full workspace access',
     };
   }
 
-  // Marketing/content patterns → Editor
-  if (/\b(marketing|content|creative|social|brand|campaign|media)\b/.test(lowerEmail)) {
+  // Marketing, content, creative → Editor
+  if (/marketing|content|creative|social|brand|campaign|manager|coordinator/.test(titleLower) ||
+      /marketing@|content@|creative@|social@/.test(emailLower)) {
     return {
       suggestedRole: 'editor',
-      reason: 'Marketing role detected — campaign creation and influencer search access recommended.',
-      confidence: 0.80,
+      confidence: 0.78,
+      reasoning: 'Marketing and content roles typically need campaign editing access',
+      reason: 'Marketing and content roles typically need campaign editing access',
     };
   }
 
-  // External/client patterns → Viewer
-  if (/\b(client|external|partner|agency|brand-manager|review)\b/.test(lowerEmail)) {
+  // Analytics, data, report → Viewer
+  if (/analytics|data|report|intern|assistant|finance|legal/.test(titleLower) ||
+      /analytics@|data@|report@|intern@/.test(emailLower)) {
     return {
       suggestedRole: 'viewer',
-      reason: 'External stakeholder detected — read-only access recommended.',
-      confidence: 0.78,
+      confidence: 0.72,
+      reasoning: 'Analytics and support roles typically need view-only access',
+      reason: 'Analytics and support roles typically need view-only access',
     };
   }
 
-  // Default: Editor
+  // Default: Editor (most common role for team members)
   return {
     suggestedRole: 'editor',
-    reason: 'Standard team member — campaign and search access.',
-    confidence: 0.55,
+    confidence: 0.5,
+    reasoning: 'Default suggestion — most team members need editing access',
+    reason: 'Default suggestion — most team members need editing access',
   };
 }
 
