@@ -13,6 +13,9 @@ import { mockTeamInvitations } from './team-invitations';
 import { mockSharedLinks } from './shared-links';
 import { mockUsageRecords, mockUsageSummaries, mockUsageAlerts } from './usage-records';
 import { mockAgencyData } from './agency-data';
+import { mockMigrationState, mockMigrationSummary } from './migration-data';
+import { mockAuditLogs } from './audit-logs';
+import { mockToSVersions, mockToSAcceptances } from './tos-versions';
 
 /**
  * Populate all collections in a MockFirestore instance.
@@ -157,6 +160,25 @@ export function seedMockData(db: MockFirestore): void {
     db._getCollection('agencies').set(mockAgencyData.id, mockAgencyData);
   }
 
+  // Migration data
+  db._getCollection('migration_states').set(mockMigrationState.id, mockMigrationState.data);
+  db._getCollection('migration_summaries').set(mockMigrationSummary.id, mockMigrationSummary.data);
+
+  // Audit logs
+  for (const al of mockAuditLogs) {
+    db._getCollection('audit_logs').set(al.id, al.data);
+  }
+
+  // ToS versions
+  for (const tv of mockToSVersions) {
+    db._getCollection('tos_versions').set(tv.id, tv.data);
+  }
+
+  // ToS acceptances
+  for (const ta of mockToSAcceptances) {
+    db._getCollection('tos_acceptances').set(ta.id, ta.data);
+  }
+
   // Profile dedup locks (empty — will be populated by profile creation flows)
   // No seed data needed.
 
@@ -169,6 +191,7 @@ export function seedMockData(db: MockFirestore): void {
     'subscriptions', 'invoices', 'payment_methods',
     'team_invitations', 'shared_links',
     'usage_records', 'usage_summaries', 'usage_alerts', 'agencies',
+    'migration_states', 'migration_summaries', 'audit_logs', 'tos_versions', 'tos_acceptances',
   ];
   for (const name of seededCollections) {
     db._markDirty(name);

@@ -18,6 +18,7 @@ import { PlanTier } from '@/types/workspace';
 import { IndustryType } from '@/types/firebase';
 import { UsageRecord, UsageMetricType, UsagePrediction } from '@/types/usage';
 import { AgencyWorkspaceSummary } from '@/types/agency';
+import { MigrationSuggestion } from '@/types/migration';
 
 // ===== HELPERS =====
 
@@ -523,58 +524,89 @@ export async function compareWorkspaces(
 
 // ===== SPRINT 5: MIGRATION =====
 
-export interface MigrationSuggestion {
-  suggestedWorkspaces: Array<{
-    name: string;
-    campaignCount: number;
-    creatorCount: number;
-  }>;
-  reasoning: string;
-}
-
 /**
- * Suggest workspace structure from existing data.
+ * Suggest a workspace configuration based on the user's legacy data profile.
+ *
+ * Plan selection logic:
+ * - > 15 campaigns  → 'scale'  (heavy workload, unlimited capacity needed)
+ * - > 5 campaigns   → 'growth' (active team, mid-tier limits sufficient)
+ * - ≤ 5 campaigns   → 'discovery' (light usage, entry plan fits)
+ *
+ * Industry is inferred from the volume of saved creators — fashion/lifestyle
+ * brands tend to have larger creator pools, while niche verticals stay lean.
+ *
  * AI Feature: Smart Migration Assistant
  */
-export async function suggestMigrationStructure(data: {
-  campaigns: Array<{ title: string; brandName?: string }>;
-  creatorCount: number;
+export async function suggestMigrationStructure(legacyData: {
+  campaigns: number;
+  creators: number;
+  notes: number;
+  lists: number;
+  searchHistory: number;
 }): Promise<MigrationSuggestion> {
-  await aiDelay(800, 1500);
+  await new Promise<void>((resolve) => setTimeout(resolve, 500));
 
-  const { campaigns, creatorCount } = data;
+  const { campaigns, creators, searchHistory } = legacyData;
 
-  // Group campaigns by brand name (or infer from title)
-  const brandGroups = new Map<string, number>();
-
-  for (const campaign of campaigns) {
-    const brand = campaign.brandName || extractBrandFromTitle(campaign.title);
-    brandGroups.set(brand, (brandGroups.get(brand) || 0) + 1);
+  // Determine recommended plan tier based on campaign volume
+  let suggestedPlan: MigrationSuggestion['suggestedPlan'];
+  if (campaigns > 15) {
+    suggestedPlan = 'scale';
+  } else if (campaigns > 5) {
+    suggestedPlan = 'growth';
+  } else {
+    suggestedPlan = 'discovery';
   }
 
-  if (brandGroups.size <= 1) {
-    const brandName = brandGroups.keys().next().value || 'My Brand';
-    return {
-      suggestedWorkspaces: [
-        {
-          name: `${brandName} Workspace`,
-          campaignCount: campaigns.length,
-          creatorCount,
-        },
-      ],
-      reasoning: `All ${campaigns.length} campaigns appear to be for a single brand. We recommend creating one workspace.`,
-    };
+  // Infer likely industry from creator pool size and search history
+  let suggestedIndustry: string;
+  if (creators > 80 || searchHistory > 100) {
+    // Large pools suggest broad consumer verticals (fashion, lifestyle)
+    suggestedIndustry = 'Fashion';
+  } else if (creators > 40) {
+    // Mid-size pools are common in beauty and lifestyle brands
+    suggestedIndustry = 'Beauty';
+  } else if (campaigns > 10) {
+    // High campaign count with fewer creators → tech or e-commerce
+    suggestedIndustry = 'Technology';
+  } else {
+    // Default fallback for mixed or unclear signals
+    suggestedIndustry = 'Other';
   }
 
-  const workspaces = Array.from(brandGroups.entries()).map(([brand, count]) => ({
-    name: `${brand} Workspace`,
-    campaignCount: count,
-    creatorCount: Math.ceil(creatorCount / brandGroups.size),
-  }));
+  // Build plain-English reasoning sentence
+  const planLabel =
+    suggestedPlan === 'scale'
+      ? 'Scale (unlimited searches and campaigns)'
+      : suggestedPlan === 'growth'
+      ? 'Growth (50 searches, 25 campaigns)'
+      : 'Discovery (20 searches, 5 campaigns)';
+
+  const reasoning =
+    `Based on your ${campaigns} campaign${campaigns === 1 ? '' : 's'}, ` +
+    `${creators} saved creator${creators === 1 ? '' : 's'}, ` +
+    `and ${searchHistory} search${searchHistory === 1 ? '' : 'es'}, ` +
+    `we recommend the ${planLabel} plan. ` +
+    (suggestedPlan === 'discovery'
+      ? 'Your usage fits comfortably within the entry tier.'
+      : suggestedPlan === 'growth'
+      ? 'The Growth tier gives your team room to scale without hitting limits.'
+      : 'The Scale tier removes all caps so your high-volume workflow is never interrupted.');
+
+  // Confidence is higher when campaign count is a clear signal
+  const confidence =
+    campaigns > 15 || campaigns <= 2
+      ? 0.92  // Clear signal at both extremes
+      : campaigns > 8
+      ? 0.84  // Moderate-high confidence in growth range
+      : 0.72; // Ambiguous middle band
 
   return {
-    suggestedWorkspaces: workspaces,
-    reasoning: `We detected ${brandGroups.size} distinct brands across ${campaigns.length} campaigns. We suggest creating a separate workspace for each brand.`,
+    suggestedName: 'My Brand Hub',
+    suggestedIndustry,
+    suggestedPlan,
+    reasoning,
+    confidence,
   };
 }
 
@@ -582,13 +614,4 @@ export async function suggestMigrationStructure(data: {
 
 function daysSince(isoDate: string): number {
   return Math.floor((Date.now() - new Date(isoDate).getTime()) / (1000 * 60 * 60 * 24));
-}
-
-function extractBrandFromTitle(title: string): string {
-  // Simple heuristic: first 1-2 words often contain brand
-  const words = title.split(/\s+/);
-  if (words.length >= 2 && words[0].length <= 12) {
-    return words.slice(0, 2).join(' ');
-  }
-  return words[0] || 'Unknown';
 }
