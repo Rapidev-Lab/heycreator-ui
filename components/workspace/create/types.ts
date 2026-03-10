@@ -8,7 +8,11 @@ export type WorkspaceFormData = {
   slug: string;
   logoFile: File | null;
   logoPreviewUrl: string | null;
+  logoSource: 'upload' | 'brandfetch' | null;
   brandName: string;
+  brandDomain: string;
+  brandColors: { hex: string; type: string }[];
+  brandFonts: { name: string; type: string }[];
   industry: IndustryType | '';
   website: string;
   companySize: CompanySize | '';
@@ -55,7 +59,11 @@ export const initialFormData: WorkspaceFormData = {
   slug: '',
   logoFile: null,
   logoPreviewUrl: null,
+  logoSource: null,
   brandName: '',
+  brandDomain: '',
+  brandColors: [],
+  brandFonts: [],
   industry: '',
   website: '',
   companySize: '',

@@ -9,7 +9,9 @@ export interface UploadedFile {
   type: string;
 }
 
-const isMockMode = process.env.NEXT_PUBLIC_MOCK_MODE === 'true';
+const isMockMode =
+  process.env.NEXT_PUBLIC_MOCK_MODE === 'true' ||
+  !process.env.NEXT_PUBLIC_FIREBASE_API_KEY;
 
 function mockUploadedFile(file: File, mockPath: string): UploadedFile {
   return {
